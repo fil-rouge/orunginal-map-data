@@ -2,8 +2,6 @@
 
 include_once(dirname(__DIR__).'/model/connexion_sql.php');
 
-echo 'Controller go go go ! <br/>';
-
 /**
  * Process action corresponding to http get from main
  * @param unknown $request
@@ -22,7 +20,7 @@ function analyzeRequest($request, $params)
 			break;
 
 		case "displayNodes":
-			// TODO Node part
+			include_once('node/index.php');
 			break;
 
 		case "getByLocalisation":
