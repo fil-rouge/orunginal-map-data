@@ -7,16 +7,18 @@
 
     <body>
         <h1>Les points GPS d'OSM !</h1>
-        <p>Derniers points d'OSM :</p>
  
         <?php
+        echo 'Nombre de points = '.count($points).'<br/>';
+        
         foreach($points as $point)
         {
         ?>
         <div>
             <p>
-                <?php echo 'ID: ' . $point['id'] . ' | Lat: ' . $point['lat'] . ' | Lon: ' . $point['lon'] . '<br/>'; ?>
-                <br />
+                <?php  
+                    $point->display();
+                ?>
             </p>
         </div>
         <?php
