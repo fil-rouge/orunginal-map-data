@@ -8,7 +8,8 @@ class Segment
 	protected $note;
 	protected $idNodeA;
 	protected $idNodeB;
-	protected $pointsGPS[];
+	protected $pointsGPS; //list
+
 
 /************************ CONSTRUCTOR ************************/
 
@@ -20,7 +21,7 @@ class Segment
 		$this->note = $aNote;
 		$this->idNodeA = $anIdNodeA;
 		$this->idNodeB = $anIdNodeB;
-		$this->pointsGPS[] = $listPoints;
+		$this->pointsGPS = $listPoints;
 	}
 
 
@@ -83,4 +84,16 @@ class Segment
 	{
 		$this->idNodeB = $newIdNodeB;
 	}
+
+	// List of GPS points
+	public function getPointsGPS()
+	{
+		return $this->pointsGPS;
+	}
+
+	public function setPointGPS($newList)
+	{
+		$this->pointsGPS = $newList;
+	}
+
 }
