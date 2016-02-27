@@ -1,6 +1,6 @@
 <?php
 	
-	include_once('model/pointGPS/pointGpsService.php');
+	include_once('model/pointGPS/PointGpsService.php');
 	include_once('model/pointGPS/PointGPS.class.php');
 
 
