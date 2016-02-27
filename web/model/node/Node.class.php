@@ -36,7 +36,7 @@ class Node
 
 	public function setIdPoint($newIdPoint)
 	{
-		$this->lat = $newIdPoint;
+		$this->idPoint = $newIdPoint;
 	}
 
 }
