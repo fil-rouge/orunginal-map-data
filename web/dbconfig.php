@@ -1,6 +1,6 @@
 <?php
 
 $host='localhost';
-$db = 'mylocaldb';
+$db = 'orunginaldb';
 $username = 'orunginalpsql';
 $password = 'orunginal3Mdp';
