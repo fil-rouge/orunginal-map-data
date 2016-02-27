@@ -1,6 +1,6 @@
 <?php
 	
-	include_once('model/pointGPS/get_pointGPS.php');
+	include_once('model/pointGPS/pointGpsService.php');
 	include_once('model/pointGPS/PointGPS.class.php');
 
 	//query 2 points from database
@@ -11,6 +11,13 @@
 	foreach($pointsGPS as $point) 
 	{
 		$points[] = new PointGPS($point['id'],$point['lat'],$point['lon']);
+	}
+
+	$pointFound = get_by_coord($points[1]->getLat(), $points[1]->getLon());
+	foreach($pointFound as $point) 
+	{
+		$pt = new PointGPS($point['id'],$point['lat'],$point['lon']);
+		$pt->display();
 	}
 
 	// Display view
