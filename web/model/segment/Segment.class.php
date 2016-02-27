@@ -31,7 +31,7 @@ class Segment
 	{
 		echo 'id: '.$this->id.' | distance: '.$this->distance
 			 .' | note: '.$this->note.' | idNodeA: '.$this->idNodeA
-			 .' | idNodeB: '.$this->idNodeA.' | pointsGPS: '.$this->pointsGPS[];
+			 .' | idNodeB: '.$this->idNodeB.' | pointsGPS: '.$this->pointsGPS;
 	}
 
 

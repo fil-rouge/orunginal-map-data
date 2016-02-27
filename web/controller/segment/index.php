@@ -15,8 +15,8 @@
 	foreach($segmentsDB as $segment) 
 	{
 		$segments[] = new Segment($segment['id'],$segment['distance'],
-								  $segment['note'], $segment['idNoeudA'],
-								  $segment['idNoeudB'], null);
+								  $segment['note'], $segment['idnodea'],
+								  $segment['idnodeb'], null);
 	}
 
 

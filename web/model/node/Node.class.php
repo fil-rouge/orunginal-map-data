@@ -5,6 +5,7 @@ class Node
 /************************* ATTRIBUTES ************************/
 	protected $id;
 	protected $idPoint;
+	
 
 /************************ CONSTRUCTOR ************************/
 

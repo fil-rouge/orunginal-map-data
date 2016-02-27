@@ -16,7 +16,7 @@ function analyzeRequest($request, $params)
 			break;
 
 		case "displaySegments":
-			// TODO Segment part
+			include_once('segment/index.php');
 			break;
 
 		case "displayNodes":
