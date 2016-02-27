@@ -22,7 +22,7 @@ function get_pointGPS($limit)
 }
 
 /**
-*	Returns all GPS points with limit
+*	Returns all GPS points with aLat & aLon
 *
 */
 function get_by_coord($aLat, $aLon)
@@ -39,4 +39,26 @@ function get_by_coord($aLat, $aLon)
 	$pointGPS = $qry->fetchAll();
 	
 	return $pointGPS;
+}
+
+/**
+*	Insert into table pointgps a point
+*
+*/
+function insert_pointgps($aLat, $aLon)
+{
+	//link to the global database connexion
+	global $bdd;
+	
+	try
+	{
+	    $qry = $bdd->prepare('INSERT INTO pointGPS (lat,lon) values ('.$aLat.','.$aLon.')');
+		$qry->execute();
+		return true;
+	}
+	catch(Exception $e)
+	{
+	    die('Erreur : '.$e->getMessage());
+	}
+	return false;
 }
