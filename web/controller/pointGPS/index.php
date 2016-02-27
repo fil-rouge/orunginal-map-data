@@ -5,10 +5,10 @@
 
 
 	// Test insert
-	$insert = insert_pointgps(48.4546 , 7.554959);
+	//$insert = insert_pointgps(48.4546 , 7.554959);
 
 	// Query 10 points from database
-	$pointsGPS = get_pointGPS(10);
+	$pointsGPS = get_pointGPS_by_id(10);
 
 	// Data processing
 	$points = array();
@@ -18,7 +18,7 @@
 	}
 
 	// Test get_by_coord
-	$pointFound = get_by_coord($points[1]->getLat(), $points[1]->getLon());
+	$pointFound = get_by_coord($points[0]->getLat(), $points[0]->getLon());
 	foreach($pointFound as $point) 
 	{
 		$pt = new PointGPS($point['id'],$point['lat'],$point['lon']);
