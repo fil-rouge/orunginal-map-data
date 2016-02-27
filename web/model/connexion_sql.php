@@ -1,6 +1,6 @@
 <?php
 
-	include_once(dirname(__DIR__).'/dbconfig.php');
+	include_once(dirname(__DIR__).'/../dbconfig.php');
 
 	// Connexion à la base de données
 	try
