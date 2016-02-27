@@ -21,8 +21,8 @@ class PointGPS
 
 	public function display()
 	{
-		echo 'ID: '.$this->id.' | Lat: '.$this->lat.
-		' | Lon: '.$this->lon;
+		echo ' id: '.$this->id.' | lat: '.$this->lat.
+		' | lon: '.$this->lon;
 	}
 
 

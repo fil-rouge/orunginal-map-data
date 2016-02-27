@@ -4,15 +4,15 @@ class Node
 {
 /************************* ATTRIBUTES ************************/
 	protected $id;
-	protected $idPoint;
+	protected $pointGPS;
 	
 
 /************************ CONSTRUCTOR ************************/
 
-	public function __construct($anId, $anIdPoint)
+	public function __construct($anId, PointGPS $aPointGPS)
 	{
 		$this->id = $anId;
-		$this->idPoint = $anIdPoint;
+		$this->pointGPS = $aPointGPS;
 	}
 
 
@@ -20,7 +20,8 @@ class Node
 
 	public function display()
 	{
-		echo 'ID: '.$this->id.' | IdPoint: '.$this->idPoint;
+		echo ' id: '.$this->id.' | pointGPS : ';
+		$this->pointGPS->display();
 	}
 
 
@@ -32,12 +33,12 @@ class Node
 
 	public function getIdPoint()
 	{
-		return $this->idPoint;
+		return $this->pointGPS;
 	}
 
-	public function setIdPoint($newIdPoint)
+	public function setIdPoint($newPointGPS)
 	{
-		$this->idPoint = $newIdPoint;
+		$this->pointGPS = $newPointGPS;
 	}
 
 }

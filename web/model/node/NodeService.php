@@ -11,8 +11,12 @@ function get_node($limit)
 	//link to the global database connexion
 	global $bdd;
 
-	//query to get ALL GPS points from database
-	$qry = $bdd->prepare('SELECT id, idpoint FROM nodes LIMIT '.$limit);
+	//query to get ALL nodes with their GPS points from database
+	$qry = $bdd->prepare('SELECT nodes.id, nodes.idpoint, 
+								 pointgps.lat, pointgps.lon 
+						  FROM nodes, pointgps 
+						  WHERE nodes.idpoint=pointgps.id
+						  LIMIT '.$limit);
 
 	$qry->setFetchMode(PDO::FETCH_ASSOC);
 	$qry->execute();
