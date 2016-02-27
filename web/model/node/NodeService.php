@@ -20,3 +20,23 @@ function get_node($limit)
 	
 	return $nodes;
 }
+
+/**
+*	Returns node with matching id
+*
+*/
+function get_node_by_id($id)
+{
+	//link to the global database connexion
+	global $bdd;
+
+	//query 
+	$qry = $bdd->prepare('SELECT id, idpoint FROM nodes 
+						  WHERE nodes.id='.$id);
+
+	$qry->setFetchMode(PDO::FETCH_ASSOC);
+	$qry->execute();
+	$nodes = $qry->fetchAll();
+	
+	return $nodes;
+}
