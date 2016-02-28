@@ -64,6 +64,30 @@ function get_by_coord($aLat, $aLon)
 }
 
 /**
+*	Returns the closest gps points to 
+*	$targetLat & $targetLon
+*/
+function get_closer_point($targetLat, $targetLon, $limit)
+{
+	//link to the global database connexion
+	global $bdd;
+
+	//query to get ALL GPS points from database
+	$qry = $bdd->prepare('SELECT id, lat, lon, MIN(ABS(lat-'.$targetLat.'))
+											   +MIN(ABS(lon-'.$targetLon.')) as sumDif
+						  FROM pointgps
+						  GROUP BY id
+						  ORDER BY sumDif ASC
+						  LIMIT '.$limit);
+
+	$qry->setFetchMode(PDO::FETCH_ASSOC);
+	$qry->execute();
+	$pointGPS = $qry->fetchAll();
+	
+	return $pointGPS;
+}
+
+/**
 *	Insert into table pointgps a point
 *
 */

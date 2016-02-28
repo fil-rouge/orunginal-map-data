@@ -28,9 +28,8 @@ foreach($segmentsDB as $segment)
 	$segments[] = new Segment($segment['id'],$segment['distance'],
 							  $segment['note'], $nodeA,
 							  $nodeB, null);
-
-	// TODO !!!!!
 }
+
 
 /**
 *	Returns the gps points for a segment in the right order
@@ -56,7 +55,7 @@ function get_segment_points_ordered($idSegment, $idStartPoint)
 	else if ($pointsDB[$pointsLength-1]['id']==$idStartPoint)
 	{
 		// GPS points are in the REVERSE ORDER
-		$i = pointsLength - 1;
+		$i = $pointsLength - 1;
 		foreach($pointsDB as $point) 
 		{
 			$points[$i] = new PointGPS($point['id'],$point['lat'],$point['lon']);
@@ -68,6 +67,7 @@ function get_segment_points_ordered($idSegment, $idStartPoint)
 		echo '<br/><strong>ERROR:[get_segment_points_by_id] idStartPoint incorrect !!</strong><br/>';
 	}
 
+	print json_encode($pointsDB);
 	return $points;
 }
 

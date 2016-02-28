@@ -9,7 +9,8 @@
 
 	// Query 10 points from database
 	$pointsGPS = get_pointGPS(20);
-
+	//$pointsGPS = get_closer_point(47,6,4);
+	
 	// Data processing
 	$points = array();
 	foreach($pointsGPS as $point) 
