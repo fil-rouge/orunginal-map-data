@@ -6,21 +6,21 @@ class Segment
 	protected $id;
 	protected $distance;
 	protected $note;
-	protected $idNodeA;
-	protected $idNodeB;
+	protected $nodeA;
+	protected $nodeB;
 	protected $pointsGPS; //list
 
 
 /************************ CONSTRUCTOR ************************/
 
-	public function __construct($anId, $aDistance, $aNote, $anIdNodeA, 
-								$anIdNodeB, $listPoints)
+	public function __construct($anId, $aDistance, $aNote, Node $aNodeA, 
+								Node $aNodeB, $listPoints)
 	{
 		$this->id = $anId;
 		$this->distance = $aDistance;
 		$this->note = $aNote;
-		$this->idNodeA = $anIdNodeA;
-		$this->idNodeB = $anIdNodeB;
+		$this->nodeA = $aNodeA;
+		$this->nodeB = $aNodeB;
 		$this->pointsGPS = $listPoints;
 	}
 
@@ -30,8 +30,15 @@ class Segment
 	public function display()
 	{
 		echo 'id: '.$this->id.' | distance: '.$this->distance
-			 .' | note: '.$this->note.' | idNodeA: '.$this->idNodeA
-			 .' | idNodeB: '.$this->idNodeB.' | pointsGPS: '.$this->pointsGPS;
+			 .' | note: '.$this->note.' | nodeA= ';
+
+		$this->nodeA->display();
+
+		echo ' | idNodeB= ';
+
+		$this->nodeB->display();
+
+		echo ' | pointsGPS: '.$this->pointsGPS;
 	}
 
 
@@ -64,25 +71,25 @@ class Segment
 	}
 
 
-	public function getIdNodeA()
+	public function getNodeA()
 	{
-		return $this->idNodeA;
+		return $this->nodeA;
 	}
 
-	public function setIdNodeA($newIdNodeA)
+	public function setNodeA(Node $newNodeA)
 	{
-		$this->idNodeA = $newIdNodeA;
+		$this->nodeA = $newNodeA;
 	}
 
 
-	public function getIdNodeB()
+	public function getNodeB()
 	{
-		return $this->idNodeB;
+		return $this->nodeB;
 	}
 
-	public function setIdNodeB($newIdNodeB)
+	public function setNodeB(Node $newNodeB)
 	{
-		$this->idNodeB = $newIdNodeB;
+		$this->nodeB = $newNodeB;
 	}
 
 	// List of GPS points

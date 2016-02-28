@@ -2,6 +2,8 @@
 	
 	include_once('model/segment/SegmentService.php');
 	include_once('model/segment/Segment.class.php');
+	include_once('model/node/Node.class.php');
+	include_once('model/pointGPS/PointGPS.class.php');
 
 	echo 'includes ok';
 	// Test insert
@@ -14,9 +16,17 @@
 	$segments = array();
 	foreach($segmentsDB as $segment) 
 	{
+		$pointA = new PointGPS($segment['idpointa'],$segment['lata'],$segment['lona']);
+		$nodeA = new Node($segment['ida'], $pointA);
+		
+		$pointB = new PointGPS($segment['idpointb'],$segment['latb'],$segment['lonb']);
+		$nodeB = new Node($segment['idb'], $pointB);
+		
 		$segments[] = new Segment($segment['id'],$segment['distance'],
-								  $segment['note'], $segment['idnodea'],
-								  $segment['idnodeb'], null);
+								  $segment['note'], $nodeA,
+								  $nodeB, null);
+
+		// TODO !!!!!
 	}
 
 

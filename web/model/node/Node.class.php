@@ -31,12 +31,12 @@ class Node
 		return $this->id;
 	}
 
-	public function getIdPoint()
+	public function getPoint()
 	{
 		return $this->pointGPS;
 	}
 
-	public function setIdPoint($newPointGPS)
+	public function setPoint(PointGPS $newPointGPS)
 	{
 		$this->pointGPS = $newPointGPS;
 	}
