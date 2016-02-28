@@ -86,3 +86,24 @@ function get_segment_from_position($latMin, $latMax, $lonMin, $lonMax)
 	
 	return $segments;
 }
+
+/**
+*	Returns all the points for a segment matching the id
+*	 
+*/
+function get_segment_points_by_id($idSegment)
+{
+	//link to the global database connexion
+	global $bdd;
+
+	//query 
+	$qry = $bdd->prepare('SELECT p.id, p.lat, p.lon
+ 						    FROM segments2pointgps s2p, pointgps p
+						   WHERE s2p.idsegment='.$idSegment.' AND s2p.idpointgps=p.id');
+
+	$qry->setFetchMode(PDO::FETCH_ASSOC);
+	$qry->execute();
+	$segments = $qry->fetchAll();
+	
+	return $segments;
+}

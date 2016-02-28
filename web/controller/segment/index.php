@@ -11,6 +11,7 @@ echo 'includes ok';
 
 // Query 10 points from database
 $segmentsDB = get_segment_from_position(46,49,4.5,8);
+//$segmentsDB = get_segment_points_by_id(1);
 
 // Data processing
 $segments = array();
