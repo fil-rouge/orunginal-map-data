@@ -8,7 +8,7 @@
 	//$insert = insert_pointgps(48.4546 , 7.554959);
 
 	// Query 10 points from database
-	$pointsGPS = get_pointGPS_by_id(10);
+	$pointsGPS = get_pointGPS(20);
 
 	// Data processing
 	$points = array();
