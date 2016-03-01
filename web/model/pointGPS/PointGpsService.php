@@ -108,3 +108,22 @@ function insert_pointgps($anIdosm, $aLat, $aLon)
 	}
 	return false;
 }
+
+
+/**
+*	Returns a gps point matching the $id from table segments2pointgps
+*
+*/
+function get_point_by_id_from_s2p($id)
+{
+	//link to the global database connexion
+	global $bdd;
+
+	//query to get ALL GPS points from database
+	$qry = $bdd->prepare('SELECT * FROM segments2pointgps 
+						  WHERE idpointgps='.$id);
+
+	$qry->setFetchMode(PDO::FETCH_ASSOC);
+	$qry->execute();
+	$pointGPS = $qry->fetchAll();
+	

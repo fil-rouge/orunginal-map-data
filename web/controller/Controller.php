@@ -25,6 +25,9 @@ function analyzeRequest($request, $params)
 
 		case "parse":
 			include_once(dirname(__DIR__).'/model/pointGPS/PointGpsService.php');
+			include_once(dirname(__DIR__).'/model/pointGPS/PointGps.class.php');
+			include_once(dirname(__DIR__).'/model/segment/SegmentService.php');
+
 			include_once('parserOsm.php');
 			break;
 

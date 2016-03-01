@@ -6,6 +6,15 @@ $countWay=0;
 $countNode=0;
 $countNd=0;
 $count=0;
+
+/*********** STORE SEGMENT INFORMATION ***************/
+$tmpNodeA=null;
+$tmpNodeB=null;
+$tmpSegPoints=null;
+
+//  Boolean to know if the parser should parse the tag or not
+$parserOn=true;
+
 // Function to use at the start of an element
 function start($parser,$element_name,$element_attrs) {
   //echo $element_name;
@@ -15,15 +24,28 @@ function start($parser,$element_name,$element_attrs) {
     case "NODE":
       //global $countNode;
       //$countNode++;
-      insert_pointgps($element_attrs['ID'],$element_attrs['LAT'],
-                      $element_attrs['LON']);
+      //insert_pointgps($element_attrs['ID'],$element_attrs['LAT'],
+      //                $element_attrs['LON']);
     break;
     case "WAY":
-      //echo "Way: ";
+      if (parserOn)
+      {
+        $segments = get_segment_by_idosm($element_attrs['ID']);
+        if (count($segments)!=0)
+        {
+          // Segment already in database -> don't parse the 
+          // following NDs
+          global $parserOn;
+          $parserOn = false;
+        }
+      }
       // global $countWay;
       // $countWay++;
       break;
     case "ND":
+      if (parserOn)
+      {
+      }
       //echo "way/node: ";
       // global $countNd;
       // $countNd++;
@@ -36,7 +58,17 @@ function stop($parser,$element_name) {
   //echo "<br>";
   switch($element_name) {
     case "WAY":
-      //echo "Way end <br>";
+      // Reactivate parser
+      global $parserOn;
+      $parserOn = true;
+
+      // Initiate variables
+      global $tmpNodeA;
+      global $tmpNodeB;
+      global $tmpSegPoints;
+      $tmpNodeA=null;
+      $tmpNodeB=null;
+      $tmpSegPoints=null;
 
       break;
   }
@@ -64,10 +96,10 @@ while ($data=fread($fp,4096)) {
   xml_get_current_line_number($parser)));
 }
 
-echo "count=". $GLOBALS['count']."<br>";
-echo "countNode=". $GLOBALS['countNode']."<br>";
-echo "countWay=". $GLOBALS['countWay']."<br>";
-echo "countNd=". $GLOBALS['countNd']."<br>";
+// echo "count=". $GLOBALS['count']."<br>";
+// echo "countNode=". $GLOBALS['countNode']."<br>";
+// echo "countWay=". $GLOBALS['countWay']."<br>";
+// echo "countNd=". $GLOBALS['countNd']."<br>";
 
 // Free the XML parser
 xml_parser_free($parser);

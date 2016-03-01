@@ -4,6 +4,7 @@ class Segment
 {
 /************************* ATTRIBUTES ************************/
 	protected $id;
+	protected $idSegosm;
 	protected $distance;
 	protected $note;
 	protected $nodeA;

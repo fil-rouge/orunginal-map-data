@@ -107,3 +107,24 @@ function get_segment_points_by_id($idSegment)
 	
 	return $segments;
 }
+
+/**
+*	Returns all the segments with the osm segment id
+*	 
+*/
+function get_segment_by_idosm($idSegment)
+{
+	//link to the global database connexion
+	global $bdd;
+
+	//query 
+	$qry = $bdd->prepare('SELECT *
+ 						    FROM segments
+						   WHERE idsegosm='.$idSegment);
+
+	$qry->setFetchMode(PDO::FETCH_ASSOC);
+	$qry->execute();
+	$segments = $qry->fetchAll();
+	
+	return $segments;
+}
