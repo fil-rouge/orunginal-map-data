@@ -12,7 +12,7 @@ function get_pointGPS($limit)
 	global $bdd;
 
 	//query to get ALL GPS points from database
-	$qry = $bdd->prepare('SELECT id, lat, lon FROM pointGPS LIMIT '.$limit);
+	$qry = $bdd->prepare('SELECT idosm, lat, lon FROM pointGPS LIMIT '.$limit);
 
 	$qry->setFetchMode(PDO::FETCH_ASSOC);
 	$qry->execute();
@@ -32,8 +32,8 @@ function get_pointGPS_by_id($id)
 	global $bdd;
 
 	//query to get ALL GPS points from database
-	$qry = $bdd->prepare('SELECT id, lat, lon FROM pointGPS 
-						  WHERE pointGPS.id='.$id);
+	$qry = $bdd->prepare('SELECT idosm, lat, lon FROM pointGPS 
+						  WHERE pointGPS.idosm='.$id);
 
 	$qry->setFetchMode(PDO::FETCH_ASSOC);
 	$qry->execute();
@@ -53,7 +53,7 @@ function get_by_coord($aLat, $aLon)
 	global $bdd;
 
 	//query to get ALL GPS points from database
-	$qry = $bdd->prepare('SELECT id, lat, lon FROM pointGPS po
+	$qry = $bdd->prepare('SELECT idosm, lat, lon FROM pointGPS po
 		WHERE po.lat='.$aLat.' AND po.lon='.$aLon);
 
 	$qry->setFetchMode(PDO::FETCH_ASSOC);
@@ -73,8 +73,8 @@ function get_closer_point($targetLat, $targetLon, $limit)
 	global $bdd;
 
 	//query to get ALL GPS points from database
-	$qry = $bdd->prepare('SELECT id, lat, lon, MIN(ABS(lat-'.$targetLat.'))
-											   +MIN(ABS(lon-'.$targetLon.')) as sumDif
+	$qry = $bdd->prepare('SELECT idosm, lat, lon, MIN(ABS(lat-'.$targetLat.')
+											   +ABS(lon-'.$targetLon.')) as sumDif
 						  FROM pointgps
 						  GROUP BY id
 						  ORDER BY sumDif ASC
@@ -91,14 +91,14 @@ function get_closer_point($targetLat, $targetLon, $limit)
 *	Insert into table pointgps a point
 *
 */
-function insert_pointgps($aLat, $aLon)
+function insert_pointgps($anIdosm, $aLat, $aLon)
 {
 	//link to the global database connexion
 	global $bdd;
 	
 	try
 	{
-	    $qry = $bdd->prepare('INSERT INTO pointGPS (lat,lon) values ('.$aLat.','.$aLon.')');
+	    $qry = $bdd->prepare('INSERT INTO pointGPS values ('.$anIdosm.','.$aLat.','.$aLon.')');
 		$qry->execute();
 		return true;
 	}

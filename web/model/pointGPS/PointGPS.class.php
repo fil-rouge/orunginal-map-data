@@ -3,15 +3,15 @@
 class PointGPS
 {
 /************************* ATTRIBUTES ************************/
-	protected $id;
+	protected $idosm;
 	protected $lat;
 	protected $lon;
 
 /************************ CONSTRUCTOR ************************/
 
-	public function __construct($anId, $aLat, $aLon)
+	public function __construct($anIdosm, $aLat, $aLon)
 	{
-		$this->id = $anId;
+		$this->idosm = $anIdosm;
 		$this->lat = $aLat;
 		$this->lon = $aLon;
 	}
@@ -21,15 +21,15 @@ class PointGPS
 
 	public function display()
 	{
-		echo ' id: '.$this->id.' | lat: '.$this->lat.
+		echo ' idosm: '.$this->idosm.' | lat: '.$this->lat.
 		' | lon: '.$this->lon;
 	}
 
 
 // GETTERS & SETTERS //
-	public function getId()
+	public function getIdosm()
 	{
-		return $this->id;
+		return $this->idosm;
 	}
 
 	public function getLat()

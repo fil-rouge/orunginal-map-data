@@ -9,23 +9,24 @@ $count=0;
 // Function to use at the start of an element
 function start($parser,$element_name,$element_attrs) {
   //echo $element_name;
-  global $count;
-  $count=$count+1;
+  // global $count;
+  // $count=$count+1;
   switch($element_name) {
     case "NODE":
-      global $countNode;
-      $countNode++;
-      //echo "-- Node --<br>";
+      //global $countNode;
+      //$countNode++;
+      insert_pointgps($element_attrs['ID'],$element_attrs['LAT'],
+                      $element_attrs['LON']);
     break;
     case "WAY":
       //echo "Way: ";
-      global $countWay;
-      $countWay++;
+      // global $countWay;
+      // $countWay++;
       break;
     case "ND":
       //echo "way/node: ";
-      global $countNd;
-      $countNd++;
+      // global $countNd;
+      // $countNd++;
       break;
   }
 }
@@ -33,6 +34,12 @@ function start($parser,$element_name,$element_attrs) {
 // Function to use at the end of an element
 function stop($parser,$element_name) {
   //echo "<br>";
+  switch($element_name) {
+    case "WAY":
+      //echo "Way end <br>";
+
+      break;
+  }
 }
 
 // Function to use when finding character data
@@ -50,7 +57,7 @@ xml_set_character_data_handler($parser,"char");
 $fp=fopen("dirname(__DIR__).'/../../files/osm/villeurbanneTout.osm","r");
 
 // Read data
-while ($data=fread($fp,4096) AND $countNode<150) {
+while ($data=fread($fp,4096)) {
   xml_parse($parser,$data,feof($fp)) or
   die (sprintf("XML Error: %s at line %d",
   xml_error_string(xml_get_error_code($parser)),

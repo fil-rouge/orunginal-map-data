@@ -10,7 +10,6 @@ ini_set('display_startup_errors', TRUE);
 
 if ((isset($_GET["action"])))
 {
-	echo 'ready to go ! <br/>';
 	analyzeRequest($_GET["action"], (!empty($_GET["params"]))?$_GET["params"]:"");
 }
 else
