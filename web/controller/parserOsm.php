@@ -37,6 +37,7 @@ function start($parser,$element_name,$element_attrs) {
           // following NDs
           global $parserOn;
           $parserOn = false;
+          echo "PARSER OFF !!<br/>";
         }
       }
       // global $countWay;
@@ -45,6 +46,43 @@ function start($parser,$element_name,$element_attrs) {
     case "ND":
       if (parserOn)
       {
+        global $tmpNodeA;
+        global $tmpNodeB;
+        global $tmpSegPoints;
+
+        //  Check if first GPS point of the segment
+        if(is_null($tmpNodeA))
+        {
+          $tmpNodeA = new PointGPS ($element_attrs['ID'],
+                                    $element_attrs['LAT'],
+                                    $element_attrs['LON']))
+          break;
+        }
+        else
+        {
+          //  Check if current point is already part of a segment in DB
+          $points = get_point_by_id_from_s2p($element_attrs['ID']);
+
+          if (count($points)!=0)
+          {
+            // Already part of a segment
+            if ($points['isnode']==true)
+            {
+              //easy TODO INSERT
+            }
+            else
+            {
+              // less easy TODO
+            }
+          }
+          else
+          {
+            //  Add to segment list
+            $tmpSegPoints[] = new PointGPS ($element_attrs['ID'],
+                                    $element_attrs['LAT'],
+                                    $element_attrs['LON']))
+          }
+        }
       }
       //echo "way/node: ";
       // global $countNd;
