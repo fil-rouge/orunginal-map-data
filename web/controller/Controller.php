@@ -23,7 +23,11 @@ function analyzeRequest($request, $params)
 			include_once('node/index.php');
 			break;
 
-		case "getByLocalisation":
+		case "parse":
+			include_once('parserOsm.php');
+			break;
+
+		case "getRoutes":
 			// if (!empty($params))
 			// {
 			// 	$this->getByLocalisation($params);
