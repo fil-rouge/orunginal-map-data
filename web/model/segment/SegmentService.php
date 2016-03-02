@@ -161,23 +161,32 @@ function insert_segment_into_segments($anIdsegosm, $aDistance,
 	
 	try
 	{
+		//$bdd->beginTransaction();
 	    $qry = $bdd->prepare('INSERT INTO segments (idsegosm, distance, note,
-	    											idnodea, idnodeb)
-	    					  values ('.$anIdsegosm.','.$aDistance.','
-	    					  		  .$aNote.','.$anIdnodea.','.$anIdnodeb.')');
+	    								  idnodea, idnodeb)
+	    			     values ('.$anIdsegosm.','.$aDistance.','
+	    					  	 .$aNote.','.$anIdnodea.','.$anIdnodeb.')
+	    			  RETURNING id');
+	    
+	 //    $qry = $bdd->prepare('SELECT currval(id)');
+
+		$qry->setFetchMode(PDO::FETCH_ASSOC);
 		$qry->execute();
-		return true;
+		$id = $qry->fetchAll();
+		var_dump($id);
+		//$bdd->commit();
+		return $id;
 	}
 	catch(Exception $e)
 	{
 	    die('Erreur : '.$e->getMessage());
 	}
-	return false;
+	return null;
 }
 
 /**
 *	Insert into DB a segment list of gps points
-*	The first
+*	The first & last points are nodes
 */
 function insert_segment_into_s2p($anIdsegment, $listPoints)
 {

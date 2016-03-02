@@ -5,10 +5,13 @@ include_once('model/segment/Segment.class.php');
 include_once('model/node/Node.class.php');
 include_once('model/pointGPS/PointGPS.class.php');
 
-echo 'includes ok';
+//echo 'includes ok';
 // Test insert
-insert_segment_into_segments(6, 8, 2.9, 126079, 1472874878);
-$insert = insert_segment_into_s2p(1, array(0 => 1472874878, 1 => 126079, 2 => 143412), true);
+
+$idseg = insert_segment_into_segments(12, 9, 2.9, 126079, 1472874878);
+//echo "Last id=".$idseg["id"]."<br/>";
+var_dump($idseg);
+//insert_segment_into_s2p(1, array(0 => 1472874878, 1 => 126079, 2 => 143412), true);
 
 display_s2p(1000);
 //$points = get_segment_points_ordered(3,4);

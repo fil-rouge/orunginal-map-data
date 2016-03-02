@@ -8,9 +8,11 @@ $countNd=0;
 $count=0;
 
 /*********** STORE SEGMENT INFORMATION ***************/
-$tmpNodeA=null;
-$tmpNodeB=null;
+$anIdsegosm=0;
+$aDistance=0;
+$aNote=0;
 $tmpSegPoints=null;
+$nbPoint=0;
 
 //  Boolean to know if the parser should parse the tag or not
 $parserOn=true;
@@ -28,16 +30,27 @@ function start($parser,$element_name,$element_attrs) {
       //                $element_attrs['LON']);
     break;
     case "WAY":
+      global $parserOn;
       if (parserOn)
       {
         $segments = get_segment_by_idosm($element_attrs['ID']);
+
         if (count($segments)!=0)
         {
           // Segment already in database -> don't parse the 
           // following NDs
-          global $parserOn;
           $parserOn = false;
           echo "PARSER OFF !!<br/>";
+        }
+        else
+        {
+          global $anIdsegosm;
+          global $aDistance;
+          global $aNote;
+
+          $anIdsegosm=$element_attrs['ID'];
+          $aDistance=0;
+          $aNote=0;
         }
       }
       // global $countWay;
@@ -46,16 +59,14 @@ function start($parser,$element_name,$element_attrs) {
     case "ND":
       if (parserOn)
       {
-        global $tmpNodeA;
-        global $tmpNodeB;
         global $tmpSegPoints;
+        global $nbPoint;
 
         //  Check if first GPS point of the segment
-        if(is_null($tmpNodeA))
+        if($nbPoint==0)
         {
-          $tmpNodeA = new PointGPS ($element_attrs['ID'],
-                                    $element_attrs['LAT'],
-                                    $element_attrs['LON']))
+          $tmpSegPoints[$nbPoint] = $element_attrs['ID'];
+          $nbPoint = $nbPoint+1;
           break;
         }
         else
@@ -68,7 +79,34 @@ function start($parser,$element_name,$element_attrs) {
             // Already part of a segment
             if ($points['isnode']==true)
             {
-              //easy TODO INSERT
+              // We found node B for the current segment !!
+              $tmpSegPoints[$nbPoint] = $element_attrs['ID'];
+              $nbPoint = $nbPoint+1;
+
+              global $anIdsegosm;
+              global $aDistance;
+              global $aNote;
+
+              //  INSERT NEW SEGMENT TO DB
+              try {
+
+              }
+              catch(Exception $e)
+              {
+                  die('Erreur : '.$e->getMessage());
+              }
+              $idSeg = insert_segment_into_segments($anIdsegosm, $aDistance, 
+                                                    $aNote, $tmpSegPoints[0], 
+                                                    $tmpSegPoints[$nbPoint-1]);
+
+              insert_segment_into_s2p($idSeg['id'], $tmpSegPoints);
+
+              //  RESET LIST STRUCTURE
+              $tmpSegPoints[0] = null;
+              $tmpSegPoints[0] = $element_attrs['ID'];
+              $nbPoint = 1;
+              $aDistance=0;
+              $aNote=0;
             }
             else
             {
@@ -78,9 +116,8 @@ function start($parser,$element_name,$element_attrs) {
           else
           {
             //  Add to segment list
-            $tmpSegPoints[] = new PointGPS ($element_attrs['ID'],
-                                    $element_attrs['LAT'],
-                                    $element_attrs['LON']))
+            $tmpSegPoints[$nbPoint] = $element_attrs['ID'];
+            $nbPoint = $nbPoint+1;
           }
         }
       }
@@ -101,13 +138,10 @@ function stop($parser,$element_name) {
       $parserOn = true;
 
       // Initiate variables
-      global $tmpNodeA;
-      global $tmpNodeB;
+      global $nbPoint;
       global $tmpSegPoints;
-      $tmpNodeA=null;
-      $tmpNodeB=null;
       $tmpSegPoints=null;
-
+      $nbPoint=0;
       break;
   }
 }
