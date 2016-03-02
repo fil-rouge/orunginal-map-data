@@ -127,3 +127,5 @@ function get_point_by_id_from_s2p($id)
 	$qry->execute();
 	$pointGPS = $qry->fetchAll();
 	
+	return $pointGPS;
+}

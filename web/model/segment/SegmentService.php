@@ -128,3 +128,29 @@ function get_segment_by_idosm($idSegment)
 	
 	return $segments;
 }
+
+/**
+*	Insert into DB a segment
+*
+*/
+function insert_segment_into_segments($anIdsegosm, $aDistance, 
+									  $aNote, $anIdnodea, $anIdnodeb)
+{
+	//link to the global database connexion
+	global $bdd;
+	
+	try
+	{
+	    $qry = $bdd->prepare('INSERT INTO segments (idsegosm, distance, note,
+	    											idnodea, idnodeb)
+	    					  values ('.$anIdosm.','.$aDistance.','
+	    					  		  .$aNote.','.$anIdnodea.','.$anIdnodeb.')');
+		$qry->execute();
+		return true;
+	}
+	catch(Exception $e)
+	{
+	    die('Erreur : '.$e->getMessage());
+	}
+	return false;
+}
