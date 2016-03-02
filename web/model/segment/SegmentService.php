@@ -177,31 +177,36 @@ function insert_segment_into_segments($anIdsegosm, $aDistance,
 
 /**
 *	Insert into DB a segment list of gps points
-*
+*	The first
 */
-function insert_segment_into_s2p($anIdsegment, $listPoints, $isnode)
+function insert_segment_into_s2p($anIdsegment, $listPoints)
 {
 	//link to the global database connexion
 	global $bdd;
-	var_dump($listPoints);
-	echo "<br/>";
-	var_dump($isnode);
+
+	$arrayLength = count($listPoints)-1;
 	try
 	{
-		if ($isnode) {
-			$qry = $bdd->prepare('INSERT INTO segments2pointgps 
-	    					      values ('.$anIdsegment.','.$listPoints.',
-	    					  		  		true)');
-		}
-	    else
-	    {
-	    	$qry = $bdd->prepare('INSERT INTO segments2pointgps 
-	    					  	  values ('.$anIdsegment.','.$listPoints.',
-	    					  		  		false)');
+		$bdd->beginTransaction();
+
+		foreach ($listPoints as $key => $idpoint) 
+		{
+			if ($key==0 OR $key==$arrayLength) 
+			{
+				//	NODE
+				$bdd->exec('INSERT INTO segments2pointgps 
+		    				values ('.$anIdsegment.','.$listPoints[$key].',true);');
+			}
+		    else
+		    {
+		    	//	NOT A NODE
+		    	$bdd->exec('INSERT INTO segments2pointgps 
+		    				values ('.$anIdsegment.','.$listPoints[$key].',false);');
+		    }
 	    }
-	    
-	    $qry->execute();
-		echo "Executed ok !";
+	    $bdd->commit();
+
+
 		return true;
 	}
 	catch(Exception $e)

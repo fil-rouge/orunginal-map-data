@@ -8,13 +8,13 @@ include_once('model/pointGPS/PointGPS.class.php');
 echo 'includes ok';
 // Test insert
 insert_segment_into_segments(6, 8, 2.9, 126079, 1472874878);
-$insert = insert_segment_into_s2p(1, 126079, true);
+$insert = insert_segment_into_s2p(1, array(0 => 1472874878, 1 => 126079, 2 => 143412), true);
 
-display_s2p(10);
+display_s2p(1000);
 //$points = get_segment_points_ordered(3,4);
 
 // Query 10 points from database
-$segmentsDB = get_segment_from_position(46,49,4.5,8);
+$segmentsDB = get_segment(100);
 //$segmentsDB = get_segment_points_by_id(1);
 
 // Data processing
