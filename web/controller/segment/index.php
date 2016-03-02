@@ -7,9 +7,11 @@ include_once('model/pointGPS/PointGPS.class.php');
 
 echo 'includes ok';
 // Test insert
-//$insert = insert_pointgps(48.4546 , 7.554959);
+insert_segment_into_segments(6, 8, 2.9, 126079, 1472874878);
+$insert = insert_segment_into_s2p(1, 126079, true);
 
-$points = get_segment_points_ordered(3,4);
+display_s2p(10);
+//$points = get_segment_points_ordered(3,4);
 
 // Query 10 points from database
 $segmentsDB = get_segment_from_position(46,49,4.5,8);
@@ -28,6 +30,11 @@ foreach($segmentsDB as $segment)
 	$segments[] = new Segment($segment['id'],$segment['distance'],
 							  $segment['note'], $nodeA,
 							  $nodeB, null);
+}
+
+function display_s2p($limit)
+{
+	print json_encode(get_s2p($limit));
 }
 
 

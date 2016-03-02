@@ -36,6 +36,26 @@ function get_segment($limit)
 }
 
 /**
+*	Returns all segments from table segments2pointgps
+*
+*/
+function get_s2p($limit)
+{
+	//link to the global database connexion
+	global $bdd;
+
+	//query 
+	$qry = $bdd->prepare('SELECT * FROM segments2pointgps
+  						  LIMIT '.$limit);
+
+	$qry->setFetchMode(PDO::FETCH_ASSOC);
+	$qry->execute();
+	$segments = $qry->fetchAll();
+	
+	return $segments;
+}
+
+/**
 *	Returns segment with matching id
 *
 */
@@ -143,9 +163,45 @@ function insert_segment_into_segments($anIdsegosm, $aDistance,
 	{
 	    $qry = $bdd->prepare('INSERT INTO segments (idsegosm, distance, note,
 	    											idnodea, idnodeb)
-	    					  values ('.$anIdosm.','.$aDistance.','
+	    					  values ('.$anIdsegosm.','.$aDistance.','
 	    					  		  .$aNote.','.$anIdnodea.','.$anIdnodeb.')');
 		$qry->execute();
+		return true;
+	}
+	catch(Exception $e)
+	{
+	    die('Erreur : '.$e->getMessage());
+	}
+	return false;
+}
+
+/**
+*	Insert into DB a segment list of gps points
+*
+*/
+function insert_segment_into_s2p($anIdsegment, $listPoints, $isnode)
+{
+	//link to the global database connexion
+	global $bdd;
+	var_dump($listPoints);
+	echo "<br/>";
+	var_dump($isnode);
+	try
+	{
+		if ($isnode) {
+			$qry = $bdd->prepare('INSERT INTO segments2pointgps 
+	    					      values ('.$anIdsegment.','.$listPoints.',
+	    					  		  		true)');
+		}
+	    else
+	    {
+	    	$qry = $bdd->prepare('INSERT INTO segments2pointgps 
+	    					  	  values ('.$anIdsegment.','.$listPoints.',
+	    					  		  		false)');
+	    }
+	    
+	    $qry->execute();
+		echo "Executed ok !";
 		return true;
 	}
 	catch(Exception $e)
