@@ -22,6 +22,8 @@ function start($parser,$element_name,$element_attrs) {
   //echo $element_name;
   // global $count;
   // $count=$count+1;
+  global $parserOn;
+
   switch($element_name) {
     case "NODE":
       //global $countNode;
@@ -30,8 +32,10 @@ function start($parser,$element_name,$element_attrs) {
       //                $element_attrs['LON']);
     break;
     case "WAY":
-      global $parserOn;
-      if (parserOn)
+      global $countWay;
+      $countWay = $countWay + 1;
+      
+      if ($parserOn)
       {
         $segments = get_segment_by_idosm($element_attrs['ID']);
 
@@ -44,6 +48,7 @@ function start($parser,$element_name,$element_attrs) {
         }
         else
         {
+          //  Initiate the segment structure
           global $anIdsegosm;
           global $aDistance;
           global $aNote;
@@ -53,70 +58,153 @@ function start($parser,$element_name,$element_attrs) {
           $aNote=0;
         }
       }
-      // global $countWay;
-      // $countWay++;
+       
       break;
     case "ND":
-      if (parserOn)
+      if ($parserOn)
       {
         global $tmpSegPoints;
         global $nbPoint;
 
-        //  Check if first GPS point of the segment
+        //  Check if current point is the first GPS point of the segment
         if($nbPoint==0)
         {
-          $tmpSegPoints[$nbPoint] = $element_attrs['ID'];
-          $nbPoint = $nbPoint+1;
+          $tmpSegPoints[$nbPoint] = $element_attrs['REF'];
+          $nbPoint = 1;
           break;
         }
         else
         {
           //  Check if current point is already part of a segment in DB
-          $points = get_point_by_id_from_s2p($element_attrs['ID']);
+          $points = get_point_by_id_from_s2p($element_attrs['REF']);
 
           if (count($points)!=0)
           {
             // Already part of a segment
-            if ($points['isnode']==true)
+            
+            // We found node B for the current segment !!
+            $tmpSegPoints[$nbPoint] = $element_attrs['REF'];
+            $nbPoint = $nbPoint+1;
+
+            global $anIdsegosm;
+            global $aDistance;
+            global $aNote;
+
+            //  INSERT NEW SEGMENT TO DB
+            try 
             {
-              // We found node B for the current segment !!
-              $tmpSegPoints[$nbPoint] = $element_attrs['ID'];
-              $nbPoint = $nbPoint+1;
-
-              global $anIdsegosm;
-              global $aDistance;
-              global $aNote;
-
-              //  INSERT NEW SEGMENT TO DB
-              try {
-
-              }
-              catch(Exception $e)
-              {
-                  die('Erreur : '.$e->getMessage());
-              }
+              echo "INSERT new segment ! <br/>";
               $idSeg = insert_segment_into_segments($anIdsegosm, $aDistance, 
                                                     $aNote, $tmpSegPoints[0], 
                                                     $tmpSegPoints[$nbPoint-1]);
 
-              insert_segment_into_s2p($idSeg['id'], $tmpSegPoints);
-
-              //  RESET LIST STRUCTURE
-              $tmpSegPoints[0] = null;
-              $tmpSegPoints[0] = $element_attrs['ID'];
-              $nbPoint = 1;
-              $aDistance=0;
-              $aNote=0;
+              insert_segment_into_s2p($idSeg[0]['id'], $tmpSegPoints);
             }
-            else
+            catch(Exception $e)
             {
-              // less easy TODO
+              echo "FAIL: INSERT SEGMENT INTO DB !<br/>";
+              die('Erreur : '.$e->getMessage());
+            }
+            
+
+            //  RESET LIST STRUCTURE
+            $tmpSegPoints[0] = null;
+            $tmpSegPoints[0] = $element_attrs['REF'];
+            $nbPoint = 1;
+            $aDistance=0;
+            $aNote=0;
+
+            if ($points[0]['isnode']==false)
+            {
+              //  FOUND NEW NODE -> Cut existing segment into 2 segments
+
+              /******** NEW SEGMENTS STRUCTURES ********/
+              $newSegment1=null;
+              $nbPoint1=0;
+              $newSegment2=null;
+              $nbPoint2=0;
+
+              $olds2p = delete_from_s2p_by_id($points[0]['idsegment']);
+              $oldSegment = delete_from_segments_by_id($points[0]['idsegment']);
+
+              /***********************************************/
+              //        DB ready to welcome new segments
+              //        Need to create the 2 segments
+              /***********************************************/
+              /***** FIRST SEGMENT ******/
+              foreach ($olds2p as $point) 
+              {
+                if($point['idpointgps']==$points[0]['idpointgps'])
+                {
+                  //  FOUND NEW NODE
+                  $newSegment1[$nbPoint1] = $point['idpointgps'];
+                  $nbPoint1 = $nbPoint1 + 1;
+
+                  // Also add to segment2
+
+                  $newSegment2[0] = $point['idpointgps'];
+                  $nbPoint2 = 1;
+                  break;
+                }
+                else
+                {
+                  //  Add to segment list
+                  $newSegment1[$nbPoint1] = $point['idpointgps'];
+                  $nbPoint1 = $nbPoint1 + 1;
+                }
+              }
+
+              /***** SECOND SEGMENT ******/
+              $olds2pLength = count($olds2p);
+              for ($i=$nbPoint1; $i < $olds2pLength ; $i++) 
+              { 
+                $newSegment2[$nbPoint2] = $olds2p[$i]['idpointgps'];
+                echo '$newSegment2[$nbPoint2]=';
+                var_dump($newSegment2[$nbPoint2]);
+                echo ' // $point[$i][idpointgps]=';
+                var_dump($olds2p[$i]['idpointgps']);
+                echo ' // $nbPoint2=';
+                var_dump($nbPoint2);
+                echo ' // $i=';
+                var_dump($i);
+                $nbPoint2 = $nbPoint2 + 1;  
+              }
+
+              /*****************************************************/
+              //            INSERT TWO NEW SEGMENT TO DB
+              /*****************************************************/
+              try 
+              {
+                // segment1
+                $idSeg1 = insert_segment_into_segments($oldSegment[0]['idsegosm'], 
+                                                      $oldSegment[0]['distance'], 
+                                                      $oldSegment[0]['note'], 
+                                                      $newSegment1[0], 
+                                                      $newSegment1[$nbPoint1-1]);
+
+                insert_segment_into_s2p($idSeg1[0]['id'], $newSegment1);
+
+                // segment2
+                $idSeg2 = insert_segment_into_segments($oldSegment[0]['idsegosm'], 
+                                                      $oldSegment[0]['distance'], 
+                                                      $oldSegment[0]['note'], 
+                                                      $newSegment2[0], 
+                                                      $newSegment2[$nbPoint2-1]);
+
+                insert_segment_into_s2p($idSeg2[0]['id'], $newSegment2);
+              }
+              catch(Exception $e)
+              {
+                echo "FAIL: INSERT 2 NEW SEGMENTS INTO DB !<br/>";
+                die('Erreur : '.$e->getMessage());
+              }
+
             }
           }
           else
           {
-            //  Add to segment list
-            $tmpSegPoints[$nbPoint] = $element_attrs['ID'];
+            //  Not found in table s2p -> Add to segment list
+            $tmpSegPoints[$nbPoint] = $element_attrs['REF'];
             $nbPoint = $nbPoint+1;
           }
         }
@@ -133,6 +221,32 @@ function stop($parser,$element_name) {
   //echo "<br>";
   switch($element_name) {
     case "WAY":
+      global $nbPoint;
+      if ($nbPoint>1)
+      {
+        global $tmpSegPoints;
+        global $anIdsegosm;
+        global $aDistance;
+        global $aNote;
+
+        //  INSERT NEW SEGMENT TO DB
+        try 
+        {
+          echo "INSERT new segment ! <br/>";
+          echo "nbPoint=".$nbPoint."; $anIdsegosm=".$anIdsegosm."<br/>";
+          $idSeg = insert_segment_into_segments($anIdsegosm, $aDistance, 
+                                                $aNote, $tmpSegPoints[0], 
+                                                $tmpSegPoints[$nbPoint-1]);
+          var_dump($tmpSegPoints);
+          insert_segment_into_s2p($idSeg[0]['id'], $tmpSegPoints);
+        }
+        catch(Exception $e)
+        {
+          echo "FAIL: INSERT SEGMENT INTO DB !<br/>";
+          die('Erreur : '.$e->getMessage());
+        }
+      }
+
       // Reactivate parser
       global $parserOn;
       $parserOn = true;
@@ -161,7 +275,9 @@ xml_set_character_data_handler($parser,"char");
 $fp=fopen("dirname(__DIR__).'/../../files/osm/villeurbanneTout.osm","r");
 
 // Read data
-while ($data=fread($fp,4096)) {
+
+while ($data=fread($fp,4096) AND $countWay<1980) {
+  $countWay = $countWay + 1;
   xml_parse($parser,$data,feof($fp)) or
   die (sprintf("XML Error: %s at line %d",
   xml_error_string(xml_get_error_code($parser)),
@@ -170,7 +286,7 @@ while ($data=fread($fp,4096)) {
 
 // echo "count=". $GLOBALS['count']."<br>";
 // echo "countNode=". $GLOBALS['countNode']."<br>";
-// echo "countWay=". $GLOBALS['countWay']."<br>";
+ echo "countWay=".$countWay."<br>";
 // echo "countNd=". $GLOBALS['countNd']."<br>";
 
 // Free the XML parser

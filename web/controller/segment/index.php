@@ -8,8 +8,8 @@ include_once('model/pointGPS/PointGPS.class.php');
 //echo 'includes ok';
 // Test insert
 
-$idseg = insert_segment_into_segments(12, 9, 2.9, 126079, 1472874878);
-
+//$idseg = insert_segment_into_segments(12, 9, 2.9, 126079, 1472874878);
+//var_dump($idseg[0]['id']);
 //insert_segment_into_s2p(1, array(0 => 1472874878, 1 => 126079, 2 => 143412), true);
 
 //$points = get_segment_points_ordered(3,4);
