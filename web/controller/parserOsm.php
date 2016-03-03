@@ -158,14 +158,6 @@ function start($parser,$element_name,$element_attrs) {
               for ($i=$nbPoint1; $i < $olds2pLength ; $i++) 
               { 
                 $newSegment2[$nbPoint2] = $olds2p[$i]['idpointgps'];
-                echo '$newSegment2[$nbPoint2]=';
-                var_dump($newSegment2[$nbPoint2]);
-                echo ' // $point[$i][idpointgps]=';
-                var_dump($olds2p[$i]['idpointgps']);
-                echo ' // $nbPoint2=';
-                var_dump($nbPoint2);
-                echo ' // $i=';
-                var_dump($i);
                 $nbPoint2 = $nbPoint2 + 1;  
               }
 
@@ -272,7 +264,7 @@ $fp=fopen("dirname(__DIR__).'/../../files/osm/villeurbanneTout.osm","r");
 
 // Read data
 
-while ($data=fread($fp,4096) AND $countWay<1980) {
+while ($data=fread($fp,4096)) {
   $countWay = $countWay + 1;
   xml_parse($parser,$data,feof($fp)) or
   die (sprintf("XML Error: %s at line %d",
