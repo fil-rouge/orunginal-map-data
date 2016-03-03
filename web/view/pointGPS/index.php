@@ -9,7 +9,7 @@
         <h1>Les points GPS d'OSM !</h1>
  
         <?php
-        echo 'Nombre de points = '.count($points).'<br/>';
+        $points = display_points(100);
         
         foreach($points as $point)
         {

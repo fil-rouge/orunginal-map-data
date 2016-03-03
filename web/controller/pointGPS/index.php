@@ -8,19 +8,24 @@ function process_closer_point()
 	// TODO
 }
 
-
-// Test insert
-//$insert = insert_pointgps(48.4546 , 7.554959);
-
-// Query 10 points from database
-$pointsGPS = get_pointGPS(2000);
-//$pointsGPS = get_closer_point(47,6,4);
-
-// Data processing
-$points = array();
-foreach($pointsGPS as $point) 
+function display_points($limit)
 {
-	$points[] = new PointGPS($point['idosm'],$point['lat'],$point['lon']);
+	$nb = count_points();
+	echo 'Number of segments = '.$nb[0]['count'].'<br/><br/>';
+	echo 'Number displayed = '.$limit.'<br/><br/>';
+
+	// Query 10 points from database
+	$pointsGPS = get_pointGPS($limit);
+	//$pointsGPS = get_closer_point(47,6,4);
+
+	// Data processing
+	$points = array();
+	foreach($pointsGPS as $point) 
+	{
+		$points[] = new PointGPS($point['idosm'],$point['lat'],$point['lon']);
+	}
+
+	return $points;
 }
 
 // Test get_by_coord

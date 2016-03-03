@@ -21,6 +21,21 @@ function get_pointGPS($limit)
 	return $pointGPS;
 }
 
+function count_points()
+{
+	//link to the global database connexion
+	global $bdd;
+
+	//query to get ALL GPS points from database
+	$qry = $bdd->prepare('SELECT COUNT(*) FROM pointGPS');
+
+	$qry->setFetchMode(PDO::FETCH_ASSOC);
+	$qry->execute();
+	$pointGPS = $qry->fetchAll();
+	
+	return $pointGPS;
+}
+
 
 /**
 *	Returns a gps point matching the $id
@@ -96,7 +111,7 @@ function insert_pointgps($anIdosm, $aLat, $aLon)
 	global $webDir;
 
 	//query to get ALL GPS points from database
-	$line='INSERT INTO pointGPS values ('.$anIdosm.','.$aLat.','.$aLon.');'. PHP_EOL;
+	$line='INSERT INTO pointGPS values ('.$anIdosm.','.$aLat.','.$aLon.');'.PHP_EOL;
 	append_to_file($webDir.'/../scripts/insertPoints.sql', $line);
 	
 }
