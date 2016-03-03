@@ -7,22 +7,14 @@
 
     <body>
         <h1>Parsed segments from DB</h1>
- 
-        <?php
-        echo 'Number of segments = '.count($segments).'<br/>';
-        
-        foreach($segments as $segment)
-        {
-        ?>
         <div>
             <p>
                 <?php  
-                    $segment->display();
+                    display_s2p(1000);
+
+                    display_segments(1000);
                 ?>
             </p>
         </div>
-        <?php
-        }
-        ?>
     </body>
 </html>

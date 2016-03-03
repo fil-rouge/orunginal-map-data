@@ -12,20 +12,8 @@ function get_segment($limit)
 	global $bdd;
 
 	//query to get ALL GPS points from database
-	$qry = $bdd->prepare('SELECT segments.id, distance, note, na.id as idnodea, 
-								 na.idpoint as idpointa, pa.lat as lata, 
-								 pa.lon as lona, nb.id as idnodeb, 
-								 nb.idpoint as idpointb, pb.lat as latb, 
-								 pb.lon as lonb, idpointgps 
-
-						  FROM   segments, nodes as na, nodes as nb, 
-						  	     pointgps as pa, pointgps as pb, segments2pointgps 
-
-						  WHERE  segments.idnodea=na.id AND 
-						  		 segments.idnodeb=nb.id AND 
-						  		 na.idpoint=pa.id AND nb.idpoint=pb.id
-						  		 AND segments.id=idsegment
-						  
+	$qry = $bdd->prepare('SELECT *
+						  FROM   segments
 						  LIMIT '.$limit);
 
 	$qry->setFetchMode(PDO::FETCH_ASSOC);
@@ -234,6 +222,34 @@ function delete_from_s2p_by_id($anIdsegment)
 	{
 	    $qry = $bdd->prepare('DELETE FROM segments2pointgps
 	    			     	  WHERE idsegment='.$anIdsegment.'
+	    			          RETURNING *');
+	    
+		$qry->setFetchMode(PDO::FETCH_ASSOC);
+		$qry->execute();
+		$deletedItem = $qry->fetchAll();
+
+		return $deletedItem;
+	}
+	catch(Exception $e)
+	{
+	    die('Erreur : '.$e->getMessage());
+	}
+	return null;
+}
+
+/**
+*	Delete segment by id from table segments & return deleted item
+*
+*/
+function delete_from_segments_by_id($anIdsegment)
+{
+	//link to the global database connexion
+	global $bdd;
+
+	try
+	{
+	    $qry = $bdd->prepare('DELETE FROM segments
+	    			     	  WHERE id='.$anIdsegment.'
 	    			          RETURNING *');
 	    
 		$qry->setFetchMode(PDO::FETCH_ASSOC);

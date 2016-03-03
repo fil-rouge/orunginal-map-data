@@ -9,42 +9,41 @@ include_once('model/pointGPS/PointGPS.class.php');
 // Test insert
 
 $idseg = insert_segment_into_segments(12, 9, 2.9, 126079, 1472874878);
-//echo "Last id=".$idseg["id"]."<br/>";
-var_dump($idseg);
+
 //insert_segment_into_s2p(1, array(0 => 1472874878, 1 => 126079, 2 => 143412), true);
 
-display_s2p(1000);
+
 print_delete_s2p(2);
 //$points = get_segment_points_ordered(3,4);
 
-// Query 10 points from database
-$segmentsDB = get_segment(100);
-//$segmentsDB = get_segment_points_by_id(1);
 
-// Data processing
-$segments = array();
-foreach($segmentsDB as $segment) 
-{
-	$pointA = new PointGPS($segment['idpointa'],$segment['lata'],$segment['lona']);
-	$nodeA = new Node($segment['idnodea'], $pointA);
-	
-	$pointB = new PointGPS($segment['idpointb'],$segment['latb'],$segment['lonb']);
-	$nodeB = new Node($segment['idnodeb'], $pointB);
-	
-	$segments[] = new Segment($segment['id'],$segment['distance'],
-							  $segment['note'], $nodeA,
-							  $nodeB, null);
-}
 
 function display_s2p($limit)
 {
-	echo "<br/>----- DISPLAY TABLE S2P ------<br/>";
-	print json_encode(get_s2p($limit));
+	echo "<h2>----- DISPLAY TABLE S2P ------</h2>";
+	$segments = get_s2p($limit);
+	echo 'Number of segments = '.count($segments).'<br/>';
+	print json_encode($segments);
 }
 
 function print_delete_s2p($anIdSegment)
 {
-	echo "<br/>----- DELETE SEGMENT FROM S2P ------<br/>";
+	echo "<h2>----- DELETE SEGMENT FROM S2P ------</h2>";
+	$deletedItem = delete_from_s2p_by_id($anIdSegment);
+	print json_encode($deletedItem);
+}
+
+function display_segments($limit)
+{
+	echo "<h2>----- DISPLAY TABLE SEGMENTS ------</h2>";
+	$segments = get_segment($limit);
+	echo 'Number of segments = '.count($segments).'<br/>';
+	print json_encode($segments);
+}
+
+function print_delete_segments($anIdSegment)
+{
+	echo "<h2>----- DELETE SEGMENT FROM SEGMENTS ------</h2>";
 	$deletedItem = delete_from_s2p_by_id($anIdSegment);
 	print json_encode($deletedItem);
 }
