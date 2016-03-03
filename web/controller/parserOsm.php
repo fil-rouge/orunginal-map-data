@@ -26,12 +26,11 @@ function start($parser,$element_name,$element_attrs) {
 
   switch($element_name) {
     case "NODE":
-      //global $countNode;
-      //$countNode++;
-      insert_pointgps($element_attrs['ID'],$element_attrs['LAT'],
-                     $element_attrs['LON']);
+      //  Write insert into commands into insertPoints.sql file
+      // insert_pointgps($element_attrs['ID'],$element_attrs['LAT'],
+      //                $element_attrs['LON']);
     break;
-    case "WAYt":
+    case "WAY":
       global $countWay;
       $countWay = $countWay + 1;
       
@@ -60,7 +59,7 @@ function start($parser,$element_name,$element_attrs) {
       }
        
       break;
-    case "NDt":
+    case "ND":
       if ($parserOn)
       {
         global $tmpSegPoints;
@@ -220,7 +219,7 @@ function start($parser,$element_name,$element_attrs) {
 function stop($parser,$element_name) {
   //echo "<br>";
   switch($element_name) {
-    case "WAYt":
+    case "WAY":
       global $nbPoint;
       if ($nbPoint>1)
       {
@@ -232,12 +231,9 @@ function stop($parser,$element_name) {
         //  INSERT NEW SEGMENT TO DB
         try 
         {
-          echo "INSERT new segment ! <br/>";
-          echo "nbPoint=".$nbPoint."; $anIdsegosm=".$anIdsegosm."<br/>";
           $idSeg = insert_segment_into_segments($anIdsegosm, $aDistance, 
                                                 $aNote, $tmpSegPoints[0], 
                                                 $tmpSegPoints[$nbPoint-1]);
-          var_dump($tmpSegPoints);
           insert_segment_into_s2p($idSeg[0]['id'], $tmpSegPoints);
         }
         catch(Exception $e)
@@ -276,7 +272,7 @@ $fp=fopen("dirname(__DIR__).'/../../files/osm/villeurbanneTout.osm","r");
 
 // Read data
 
-while ($data=fread($fp,4096) AND $countWay<198000) {
+while ($data=fread($fp,4096) AND $countWay<1980) {
   $countWay = $countWay + 1;
   xml_parse($parser,$data,feof($fp)) or
   die (sprintf("XML Error: %s at line %d",

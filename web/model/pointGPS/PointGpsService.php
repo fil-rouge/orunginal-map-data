@@ -21,6 +21,10 @@ function get_pointGPS($limit)
 	return $pointGPS;
 }
 
+/**
+*	Returns the number of gps points in database
+*
+*/
 function count_points()
 {
 	//link to the global database connexion

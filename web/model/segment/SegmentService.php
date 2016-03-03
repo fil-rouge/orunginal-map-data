@@ -24,6 +24,25 @@ function get_segment($limit)
 }
 
 /**
+*	Returns the number of rows in table segments
+*
+*/
+function count_rows_in_segments()
+{
+	//link to the global database connexion
+	global $bdd;
+
+	//query to get ALL GPS points from database
+	$qry = $bdd->prepare('SELECT COUNT(*) FROM segments');
+
+	$qry->setFetchMode(PDO::FETCH_ASSOC);
+	$qry->execute();
+	$rows = $qry->fetchAll();
+	
+	return $rows;
+}
+
+/**
 *	Returns all segments from table segments2pointgps
 *
 */
@@ -41,6 +60,25 @@ function get_s2p($limit)
 	$segments = $qry->fetchAll();
 	
 	return $segments;
+}
+
+/**
+*	Returns the number of rows in table segments2pointgps
+*
+*/
+function count_rows_in_s2p()
+{
+	//link to the global database connexion
+	global $bdd;
+
+	//query to get ALL GPS points from database
+	$qry = $bdd->prepare('SELECT COUNT(*) FROM segments2pointgps');
+
+	$qry->setFetchMode(PDO::FETCH_ASSOC);
+	$qry->execute();
+	$rows = $qry->fetchAll();
+	
+	return $rows;
 }
 
 /**

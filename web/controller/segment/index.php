@@ -20,7 +20,8 @@ function display_s2p($limit)
 {
 	echo "<h2>----- DISPLAY TABLE S2P ------</h2>";
 	$segments = get_s2p($limit);
-	echo 'Number of segments = '.count($segments).'<br/><br/>';
+	$nb = count_rows_in_s2p();
+	echo 'Number of rows = '.$nb[0]['count'].'<br/><br/>';
 	print json_encode($segments);
 }
 
@@ -36,7 +37,8 @@ function display_segments($limit)
 {
 	echo "<h2>----- DISPLAY TABLE SEGMENTS ------</h2>";
 	$segments = get_segment($limit);
-	echo 'Number of segments = '.count($segments).'<br/><br/>';
+	$nb = count_rows_in_segments();
+	echo 'Number of segments = '.$nb[0]['count'].'<br/><br/>';
 	print json_encode($segments);
 }
 
