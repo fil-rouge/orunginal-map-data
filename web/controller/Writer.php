@@ -10,7 +10,7 @@ function append_to_file($fileName, $line)
 	$myfile = fopen($fileName, "a") or die("Unable to open file!");
 
 	//	Write line
-	fputs($myfile, $line);
+	fwrite($myfile, $line);
 				
 	fclose($myfile);
 }

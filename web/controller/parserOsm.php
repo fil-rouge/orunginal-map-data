@@ -28,10 +28,10 @@ function start($parser,$element_name,$element_attrs) {
     case "NODE":
       //global $countNode;
       //$countNode++;
-      //insert_pointgps($element_attrs['ID'],$element_attrs['LAT'],
-      //                $element_attrs['LON']);
+      insert_pointgps($element_attrs['ID'],$element_attrs['LAT'],
+                     $element_attrs['LON']);
     break;
-    case "WAY":
+    case "WAYt":
       global $countWay;
       $countWay = $countWay + 1;
       
@@ -60,7 +60,7 @@ function start($parser,$element_name,$element_attrs) {
       }
        
       break;
-    case "ND":
+    case "NDt":
       if ($parserOn)
       {
         global $tmpSegPoints;
@@ -220,7 +220,7 @@ function start($parser,$element_name,$element_attrs) {
 function stop($parser,$element_name) {
   //echo "<br>";
   switch($element_name) {
-    case "WAY":
+    case "WAYt":
       global $nbPoint;
       if ($nbPoint>1)
       {
@@ -276,7 +276,7 @@ $fp=fopen("dirname(__DIR__).'/../../files/osm/villeurbanneTout.osm","r");
 
 // Read data
 
-while ($data=fread($fp,4096) AND $countWay<1980) {
+while ($data=fread($fp,4096) AND $countWay<198000) {
   $countWay = $countWay + 1;
   xml_parse($parser,$data,feof($fp)) or
   die (sprintf("XML Error: %s at line %d",

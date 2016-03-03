@@ -93,20 +93,12 @@ function get_closer_point($targetLat, $targetLon, $limit)
 */
 function insert_pointgps($anIdosm, $aLat, $aLon)
 {
-	//link to the global database connexion
-	global $bdd;
+	global $webDir;
+
+	//query to get ALL GPS points from database
+	$line='INSERT INTO pointGPS values ('.$anIdosm.','.$aLat.','.$aLon.');'. PHP_EOL;
+	append_to_file($webDir.'/../scripts/insertPoints.sql', $line);
 	
-	try
-	{
-	    $qry = $bdd->prepare('INSERT INTO pointGPS values ('.$anIdosm.','.$aLat.','.$aLon.')');
-		$qry->execute();
-		return true;
-	}
-	catch(Exception $e)
-	{
-	    die('Erreur : '.$e->getMessage());
-	}
-	return false;
 }
 
 
