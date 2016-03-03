@@ -1,6 +1,7 @@
 <?php
 
-include_once(dirname(__DIR__).'/model/connexion_sql.php');
+$rootDir = dirname(__DIR__);
+include_once($rootDir.'/model/connexion_sql.php');
 
 /**
  * Process action corresponding to http get from main
@@ -9,6 +10,8 @@ include_once(dirname(__DIR__).'/model/connexion_sql.php');
  */
 function analyzeRequest($request, $params)
 {
+	global $rootDir;
+	
 	switch($request)
 	{
 		case "displayPoints":
@@ -24,9 +27,9 @@ function analyzeRequest($request, $params)
 			break;
 
 		case "parse":
-			include_once(dirname(__DIR__).'/model/pointGPS/PointGpsService.php');
-			include_once(dirname(__DIR__).'/model/pointGPS/PointGps.class.php');
-			include_once(dirname(__DIR__).'/model/segment/SegmentService.php');
+			include_once($rootDir.'/model/pointGPS/PointGpsService.php');
+			include_once($rootDir.'/model/pointGPS/PointGps.class.php');
+			include_once($rootDir.'/model/segment/SegmentService.php');
 
 			include_once('parserOsm.php');
 			break;

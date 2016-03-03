@@ -81,6 +81,18 @@ function get_segment_points_ordered($idSegment, $idStartPoint)
 	return $points;
 }
 
+/**
+* 	Returns the distance between two gps points
+* 	
+*/
+function update_distance($idPointA, $idPointB)
+{
+	$pointA = get_point_by_id($idPointA);
+	$pointA = get_point_by_id($idPointB);
+
+	// TODO
+} 
+
 
 // Display view
 include_once(dirname(__DIR__).'/../view/segment/index.php');
