@@ -161,20 +161,16 @@ function insert_segment_into_segments($anIdsegosm, $aDistance,
 	
 	try
 	{
-		//$bdd->beginTransaction();
 	    $qry = $bdd->prepare('INSERT INTO segments (idsegosm, distance, note,
 	    								  idnodea, idnodeb)
 	    			     values ('.$anIdsegosm.','.$aDistance.','
 	    					  	 .$aNote.','.$anIdnodea.','.$anIdnodeb.')
 	    			  RETURNING id');
-	    
-	 //    $qry = $bdd->prepare('SELECT currval(id)');
 
 		$qry->setFetchMode(PDO::FETCH_ASSOC);
 		$qry->execute();
 		$id = $qry->fetchAll();
-		var_dump($id);
-		//$bdd->commit();
+
 		return $id;
 	}
 	catch(Exception $e)
@@ -223,4 +219,32 @@ function insert_segment_into_s2p($anIdsegment, $listPoints)
 	    die('Erreur : '.$e->getMessage());
 	}
 	return false;
+}
+
+/**
+*	Delete segment by id from s2p & return deleted item
+*
+*/
+function delete_from_s2p_by_id($anIdsegment)
+{
+	//link to the global database connexion
+	global $bdd;
+
+	try
+	{
+	    $qry = $bdd->prepare('DELETE FROM segments2pointgps
+	    			     	  WHERE idsegment='.$anIdsegment.'
+	    			          RETURNING *');
+	    
+		$qry->setFetchMode(PDO::FETCH_ASSOC);
+		$qry->execute();
+		$deletedItem = $qry->fetchAll();
+
+		return $deletedItem;
+	}
+	catch(Exception $e)
+	{
+	    die('Erreur : '.$e->getMessage());
+	}
+	return null;
 }

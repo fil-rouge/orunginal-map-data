@@ -14,6 +14,7 @@ var_dump($idseg);
 //insert_segment_into_s2p(1, array(0 => 1472874878, 1 => 126079, 2 => 143412), true);
 
 display_s2p(1000);
+print_delete_s2p(2);
 //$points = get_segment_points_ordered(3,4);
 
 // Query 10 points from database
@@ -37,9 +38,16 @@ foreach($segmentsDB as $segment)
 
 function display_s2p($limit)
 {
+	echo "<br/>----- DISPLAY TABLE S2P ------<br/>";
 	print json_encode(get_s2p($limit));
 }
 
+function print_delete_s2p($anIdSegment)
+{
+	echo "<br/>----- DELETE SEGMENT FROM S2P ------<br/>";
+	$deletedItem = delete_from_s2p_by_id($anIdSegment);
+	print json_encode($deletedItem);
+}
 
 /**
 *	Returns the gps points for a segment in the right order
