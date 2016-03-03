@@ -12,8 +12,6 @@ $idseg = insert_segment_into_segments(12, 9, 2.9, 126079, 1472874878);
 
 //insert_segment_into_s2p(1, array(0 => 1472874878, 1 => 126079, 2 => 143412), true);
 
-
-print_delete_s2p(2);
 //$points = get_segment_points_ordered(3,4);
 
 
@@ -22,7 +20,7 @@ function display_s2p($limit)
 {
 	echo "<h2>----- DISPLAY TABLE S2P ------</h2>";
 	$segments = get_s2p($limit);
-	echo 'Number of segments = '.count($segments).'<br/>';
+	echo 'Number of segments = '.count($segments).'<br/><br/>';
 	print json_encode($segments);
 }
 
@@ -30,6 +28,7 @@ function print_delete_s2p($anIdSegment)
 {
 	echo "<h2>----- DELETE SEGMENT FROM S2P ------</h2>";
 	$deletedItem = delete_from_s2p_by_id($anIdSegment);
+	echo 'Number of segments deleted = '.count($deletedItem).'<br/><br/>';
 	print json_encode($deletedItem);
 }
 
@@ -37,14 +36,15 @@ function display_segments($limit)
 {
 	echo "<h2>----- DISPLAY TABLE SEGMENTS ------</h2>";
 	$segments = get_segment($limit);
-	echo 'Number of segments = '.count($segments).'<br/>';
+	echo 'Number of segments = '.count($segments).'<br/><br/>';
 	print json_encode($segments);
 }
 
 function print_delete_segments($anIdSegment)
 {
 	echo "<h2>----- DELETE SEGMENT FROM SEGMENTS ------</h2>";
-	$deletedItem = delete_from_s2p_by_id($anIdSegment);
+	$deletedItem = delete_from_segments_by_id($anIdSegment);
+	echo 'Number of segments deleted = '.count($deletedItem).'<br/><br/>';
 	print json_encode($deletedItem);
 }
 
