@@ -31,3 +31,17 @@ function append_to_file_json($fileName, $content)
 	fclose($myfile);
 }
 
+/**
+* Open $fileName, erase content & write $line at the end of the file
+*
+*/
+function reset_write_to_file($fileName, $line)
+{
+	//	Open file 
+	$myfile = fopen($fileName, "w") or die("Unable to open file!");
+
+	//	Write line
+	fwrite($myfile, $line);
+				
+	fclose($myfile);
+}
