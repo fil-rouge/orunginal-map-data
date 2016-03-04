@@ -150,11 +150,11 @@ function get_intersections($limit)
 *	Returns the closest gps points to 
 *	$targetLat & $targetLon 
 */
-function get_closer_point($targetLat, $targetLon, $limit)
+function get_closer_point($targetLat, $targetLon)
 {
 	//link to the global database connexion
 	global $bdd;
-	
+
 	//query to get ALL GPS points from database
 	$qry = $bdd->prepare('SELECT idosm, lat, lon
 						  FROM pointgps

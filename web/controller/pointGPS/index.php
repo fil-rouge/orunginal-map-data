@@ -35,11 +35,11 @@ function display_points($limit)
 */
 function process_closer_point($aLat, $aLon)
 {
-	$closestPoint = get_closer_point($aLat, $aLon, 5);
+	$closestPoint = get_closer_point($aLat, $aLon);
 	var_dump($closestPoint);
 }
 
-process_closer_point(45.740, 4.863);
+process_closer_point(45.7405571, 4.8638673);
 
 // Display view
 include_once(dirname(__DIR__).'/../view/pointGPS/index.php');
