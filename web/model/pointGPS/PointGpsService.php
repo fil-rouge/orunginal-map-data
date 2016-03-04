@@ -154,7 +154,7 @@ function get_intersections($limit)
 	global $bdd;
 
 	//query to get ALL GPS points from database
-	$qry = $bdd->prepare('SELECT idosm, lat, lon 
+	$qry = $bdd->prepare('SELECT DISTINCT idosm, lat, lon 
 						  FROM pointGPS p, segments2pointgps s2p
 						  WHERE isnode=true AND s2p.idpointgps=p.idosm
 						  LIMIT '.$limit);

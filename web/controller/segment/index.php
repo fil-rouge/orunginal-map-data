@@ -103,17 +103,43 @@ function get_segment_points_ordered($idSegment, $idStartPoint)
 	return $points;
 }
 
+/*************************************************************************************/
+//									SET DISTANCES
+/*************************************************************************************/
+
+/**
+* 	Sets the distance value for each segment
+* 	
+*/
+function update_distances($limit)
+{
+	//	1. FOR EACH SEGMENT
+	//	2. GET THE LIST OF POINTS
+	//	3. Sum the distance between each couple of points
+	$segments = get_segment($limit);
+
+	foreach ($segments as $segment) 
+	{
+		$segmentPoints = get_segment_points_by_id($segment['id']);
+
+	}
+}
+
 /**
 * 	Returns the distance between two gps points
 * 	
 */
-function update_distance($idPointA, $idPointB)
-{
-	$pointA = get_point_by_id($idPointA);
-	$pointA = get_point_by_id($idPointB);
+function get_distance($lat1, $lon1, $lat2, $lon2) {
 
-	// TODO
-} 
+  $theta = $lon1 - $lon2;
+  $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  
+  		  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
+  $dist = acos($dist);
+  $dist = rad2deg($dist);
+  $miles = $dist * 60 * 1.1515;
+
+  return ($miles * 1.609344);
+}
 
 
 // Display view
