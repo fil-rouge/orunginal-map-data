@@ -105,9 +105,9 @@ function get_segment_points_by_id($idSegment)
 	global $bdd;
 
 	//query 
-	$qry = $bdd->prepare('SELECT p.id, p.lat, p.lon
- 						    FROM segments2pointgps s2p, pointgps p
-						   WHERE s2p.idsegment='.$idSegment.' AND s2p.idpointgps=p.id');
+	$qry = $bdd->prepare('SELECT idosm, lat, lon
+ 						    FROM segments2pointgps s2p, pointgps
+						   WHERE s2p.idsegment='.$idSegment.' AND s2p.idpointgps=idosm');
 
 	$qry->setFetchMode(PDO::FETCH_ASSOC);
 	$qry->execute();

@@ -121,7 +121,17 @@ function update_distances($limit)
 	foreach ($segments as $segment) 
 	{
 		$segmentPoints = get_segment_points_by_id($segment['id']);
-
+		var_dump($segment['id']);
+		$distance = 0;
+		$nbPoints = count($segmentPoints);
+		for ($i=0; $i < $nbPoints-1; $i++) 
+		{ 
+			$distance = $distance + get_distance($segmentPoints[$i]['lat'],
+												 $segmentPoints[$i]['lon'],
+												 $segmentPoints[$i+1]['lat'],
+												 $segmentPoints[$i+1]['lon']);
+		}
+		echo "Segment with id=".$segment['id']." is (KM) ".$distance."<br/>";
 	}
 }
 
@@ -129,8 +139,8 @@ function update_distances($limit)
 * 	Returns the distance between two gps points
 * 	
 */
-function get_distance($lat1, $lon1, $lat2, $lon2) {
-
+function get_distance($lat1, $lon1, $lat2, $lon2) 
+{
   $theta = $lon1 - $lon2;
   $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  
   		  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
@@ -141,6 +151,7 @@ function get_distance($lat1, $lon1, $lat2, $lon2) {
   return ($miles * 1.609344);
 }
 
+update_distances(100);
 
 // Display view
 include_once(dirname(__DIR__).'/../view/segment/index.php');
