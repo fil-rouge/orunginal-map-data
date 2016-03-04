@@ -24,25 +24,6 @@ function get_segment($limit)
 }
 
 /**
-*	Returns the number of rows in table segments
-*
-*/
-function count_rows_in_segments()
-{
-	//link to the global database connexion
-	global $bdd;
-
-	//query to get ALL GPS points from database
-	$qry = $bdd->prepare('SELECT COUNT(*) FROM segments');
-
-	$qry->setFetchMode(PDO::FETCH_ASSOC);
-	$qry->execute();
-	$rows = $qry->fetchAll();
-	
-	return $rows;
-}
-
-/**
 *	Returns all segments from table segments2pointgps
 *
 */
@@ -60,25 +41,6 @@ function get_s2p($limit)
 	$segments = $qry->fetchAll();
 	
 	return $segments;
-}
-
-/**
-*	Returns the number of rows in table segments2pointgps
-*
-*/
-function count_rows_in_s2p()
-{
-	//link to the global database connexion
-	global $bdd;
-
-	//query to get ALL GPS points from database
-	$qry = $bdd->prepare('SELECT COUNT(*) FROM segments2pointgps');
-
-	$qry->setFetchMode(PDO::FETCH_ASSOC);
-	$qry->execute();
-	$rows = $qry->fetchAll();
-	
-	return $rows;
 }
 
 /**
@@ -174,6 +136,11 @@ function get_segment_by_idosm($idSegment)
 	
 	return $segments;
 }
+
+
+/********************************************************************/
+//					TABLE S2P/S - INSERT/DELETE
+/********************************************************************/
 
 /**
 *	Insert into DB a segment
@@ -301,4 +268,94 @@ function delete_from_segments_by_id($anIdsegment)
 	    die('Erreur : '.$e->getMessage());
 	}
 	return null;
+}
+
+
+/********************************************************************/
+//					TABLE S2P - STATISTICS
+/********************************************************************/
+
+
+/**
+*	For each node, returns the number of segments it links
+*
+*/
+function find_intersection_in_s2p($limit)
+{
+	//link to the global database connexion
+	global $bdd;
+
+	//query to get ALL GPS points from database
+	$qry = $bdd->prepare('SELECT idpointgps, COUNT(*) as nb 
+						  FROM segments2pointgps
+						  WHERE isnode=true
+						  GROUP BY idpointgps
+						  ORDER BY nb DESC
+						  LIMIT '.$limit);
+
+	$qry->setFetchMode(PDO::FETCH_ASSOC);
+	$qry->execute();
+	$rows = $qry->fetchAll();
+	
+	return $rows;
+}
+
+/**
+*	Returns the number of rows in table segments2pointgps
+*
+*/
+function count_rows_in_s2p()
+{
+	//link to the global database connexion
+	global $bdd;
+
+	//query to get ALL GPS points from database
+	$qry = $bdd->prepare('SELECT COUNT(*) FROM segments2pointgps');
+
+	$qry->setFetchMode(PDO::FETCH_ASSOC);
+	$qry->execute();
+	$rows = $qry->fetchAll();
+	
+	return $rows;
+}
+
+/**
+*	Returns the number of rows in table segments2pointgps
+*
+*/
+function count_nodes_in_s2p()
+{
+	//link to the global database connexion
+	global $bdd;
+
+	//query to get ALL GPS points from database
+	$qry = $bdd->prepare('SELECT COUNT(*) 
+						  FROM segments2pointgps
+						  WHERE isnode=true');
+
+	$qry->setFetchMode(PDO::FETCH_ASSOC);
+	$qry->execute();
+	$rows = $qry->fetchAll();
+	
+	return $rows;
+}
+
+
+/**
+*	Returns the number of rows in table segments
+*
+*/
+function count_rows_in_segments()
+{
+	//link to the global database connexion
+	global $bdd;
+
+	//query to get ALL GPS points from database
+	$qry = $bdd->prepare('SELECT COUNT(*) FROM segments');
+
+	$qry->setFetchMode(PDO::FETCH_ASSOC);
+	$qry->execute();
+	$rows = $qry->fetchAll();
+	
+	return $rows;
 }

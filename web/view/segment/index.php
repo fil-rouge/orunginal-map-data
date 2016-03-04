@@ -12,8 +12,8 @@
                 <?php  
                     //print_delete_s2p(2);
                     //print_delete_segments(121);
-
-                    display_s2p(10);
+                    display_stats(10);
+                    display_s2p(100);
                     display_segments(10);
                 ?>
             </p>

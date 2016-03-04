@@ -15,13 +15,26 @@ include_once('model/pointGPS/PointGPS.class.php');
 //$points = get_segment_points_ordered(3,4);
 
 
+/**
+*	Display some statistics about s2p
+*
+*/
+function display_stats($limit)
+{
+	echo "<h2>----- TABLE S2P - STATISTICS ------</h2>";
+	$nodes = find_intersection_in_s2p($limit);
+	$nb = count_rows_in_s2p();
+	$nbNodes = count_nodes_in_s2p();
+	echo 'Number of rows = '.$nb[0]['count'].'<br/><br/>';
+	echo 'Number of intersections = '.$nbNodes[0]['count'].'<br/><br/>';
+	print json_encode($nodes);
+}
 
 function display_s2p($limit)
 {
 	echo "<h2>----- DISPLAY TABLE S2P ------</h2>";
 	$segments = get_s2p($limit);
-	$nb = count_rows_in_s2p();
-	echo 'Number of rows = '.$nb[0]['count'].'<br/><br/>';
+	echo 'Number of segments displayed = '.$limit.'<br/><br/>';
 	print json_encode($segments);
 }
 
