@@ -139,7 +139,7 @@ function get_segment_by_idosm($idSegment)
 
 
 /********************************************************************/
-//					TABLE S2P/S - INSERT/DELETE
+//					TABLES S2P/S - INSERT/DELETE/UPDATE
 /********************************************************************/
 
 /**
@@ -268,6 +268,19 @@ function delete_from_segments_by_id($anIdsegment)
 	    die('Erreur : '.$e->getMessage());
 	}
 	return null;
+}
+
+/**
+*	Sets the distance for a segment
+*
+*/
+function set_distance($anIdsegment, $aDistance)
+{
+	global $webDir;
+
+	//query to get ALL GPS points from database
+	$line='UPDATE segments SET distance='.$aDistance.' WHERE id='.$anIdsegment.';';
+	append_to_file($webDir.'/../scripts/setDistances.sql', $line);
 }
 
 

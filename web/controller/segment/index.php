@@ -4,6 +4,7 @@ include_once('model/segment/SegmentService.php');
 include_once('model/segment/Segment.class.php');
 include_once('model/node/Node.class.php');
 include_once('model/pointGPS/PointGPS.class.php');
+include_once('controller/Writer.php');
 
 //echo 'includes ok';
 // Test insert
@@ -107,21 +108,34 @@ function get_segment_points_ordered($idSegment, $idStartPoint)
 //									SET DISTANCES
 /*************************************************************************************/
 
+update_distances(100);
+
+/**
+*	Erase content from file setDistances.sql
+*
+*/
+function reset_file_setdistances()
+{
+	$file=dirname(__DIR__).'/../../scripts/setDistances.sql';
+
+	reset_write_to_file($file, "");
+}
+
 /**
 * 	Sets the distance value for each segment
-* 	
+* 	//	1. FOR EACH SEGMENT
+*	//	2. GET THE LIST OF POINTS
+*	//	3. Sum the distance between each couple of points
 */
 function update_distances($limit)
 {
-	//	1. FOR EACH SEGMENT
-	//	2. GET THE LIST OF POINTS
-	//	3. Sum the distance between each couple of points
+	reset_file_setdistances();
+
 	$segments = get_segment($limit);
 
 	foreach ($segments as $segment) 
 	{
 		$segmentPoints = get_segment_points_by_id($segment['id']);
-		var_dump($segment['id']);
 		$distance = 0;
 		$nbPoints = count($segmentPoints);
 		for ($i=0; $i < $nbPoints-1; $i++) 
@@ -131,7 +145,9 @@ function update_distances($limit)
 												 $segmentPoints[$i+1]['lat'],
 												 $segmentPoints[$i+1]['lon']);
 		}
-		echo "Segment with id=".$segment['id']." is (KM) ".$distance."<br/>";
+
+		//	UPDATE TABLE SEGMENT
+		set_distance($segment['id'], $distance);
 	}
 }
 

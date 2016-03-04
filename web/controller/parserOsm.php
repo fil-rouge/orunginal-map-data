@@ -261,7 +261,7 @@ $fp=fopen("dirname(__DIR__).'/../../files/osm/villeurbanneTout.osm","r");
 
 // Read data
 
-while ($data=fread($fp,4096) AND $countWay<2000) {
+while ($data=fread($fp,4096) AND $countWay<2500) {
   $countWay = $countWay + 1;
   xml_parse($parser,$data,feof($fp)) or
   die (sprintf("XML Error: %s at line %d",
