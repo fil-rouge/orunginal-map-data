@@ -108,8 +108,6 @@ function get_segment_points_ordered($idSegment, $idStartPoint)
 //									SET DISTANCES
 /*************************************************************************************/
 
-update_distances(100);
-
 /**
 *	Erase content from file setDistances.sql
 *
@@ -167,7 +165,6 @@ function get_distance($lat1, $lon1, $lat2, $lon2)
   return ($miles * 1.609344);
 }
 
-update_distances(100);
 
 // Display view
 include_once(dirname(__DIR__).'/../view/segment/index.php');

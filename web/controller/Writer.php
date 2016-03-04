@@ -1,5 +1,6 @@
 <?php
-echo "writer; ";
+
+
 /**echo "serializeDB";
 * Open $fileName & append $line at the end of the file
 *

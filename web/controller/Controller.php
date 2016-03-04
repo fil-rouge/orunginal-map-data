@@ -33,6 +33,12 @@ function analyzeRequest($request, $params)
 			include_once('parserOsm.php');
 			break;
 
+		case "getDistances":
+			include_once($webDir.'/controller/segment/index.php');
+			update_distances(10000);
+			echo "DONE : Check file scripts/setDistance.sql !<br/>";
+			break;
+
 		case "getRoutes":
 			// if (!empty($params))
 			// {
