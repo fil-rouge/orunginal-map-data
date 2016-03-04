@@ -40,12 +40,12 @@ function analyzeRequest($request, $params)
 			break;
 
 		case "getRoutes":
-			// if (!empty($params))
-			// {
-			// 	$this->getByLocalisation($params);
-			// }
-			// else
-			// 	print "erreur, paramétres non renseigner pour la requête getByLocalisation";
+			if (!empty($params))
+			{
+				getRoutes($params);
+			}
+			else
+				print "ERROR: No parameters !";
 			break;
 		case "serializeDB":
 			include_once($webDir.'/model/pointGPS/PointGpsService.php');

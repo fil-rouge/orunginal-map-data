@@ -83,30 +83,6 @@ function get_by_coord($aLat, $aLon)
 }
 
 /**
-*	Returns the closest gps points to 
-*	$targetLat & $targetLon
-*/
-function get_closer_point($targetLat, $targetLon, $limit)
-{
-	//link to the global database connexion
-	global $bdd;
-
-	//query to get ALL GPS points from database
-	$qry = $bdd->prepare('SELECT idosm, lat, lon, MIN(ABS(lat-'.$targetLat.')
-											   +ABS(lon-'.$targetLon.')) as sumDif
-						  FROM pointgps
-						  GROUP BY id
-						  ORDER BY sumDif ASC
-						  LIMIT '.$limit);
-
-	$qry->setFetchMode(PDO::FETCH_ASSOC);
-	$qry->execute();
-	$pointGPS = $qry->fetchAll();
-	
-	return $pointGPS;
-}
-
-/**
 *	Insert into table pointgps a point
 *
 */
@@ -165,3 +141,39 @@ function get_intersections($limit)
 	
 	return $pointGPS;
 }
+
+/**********************************************************************************/
+//					SERVICES USED WHEN ENDPOINT getParcours() CALLED
+/**********************************************************************************/
+
+/**
+*	Returns the closest gps points to 
+*	$targetLat & $targetLon 
+*/
+function get_closer_point($targetLat, $targetLon, $limit)
+{
+	//link to the global database connexion
+	global $bdd;
+	
+	//query to get ALL GPS points from database
+	$qry = $bdd->prepare('SELECT idosm, lat, lon
+						  FROM pointgps
+						  WHERE (ABS(lat-'.$targetLat.')+
+								 ABS(lon-'.$targetLon.'))=
+
+						  	(SELECT MIN(ABS(lat-'.$targetLat.')+
+								 ABS(lon-'.$targetLon.'))
+							FROM pointgps)');
+
+	$qry->setFetchMode(PDO::FETCH_ASSOC);
+	$qry->execute();
+	$pointGPS = $qry->fetchAll();
+	
+	return $pointGPS;
+}
+
+// // SELECT MIN(ABS(lat-'.$targetLat.')+
+// 								 ABS(lon-'.$targetLon.')) as sumDif
+// 						  FROM pointgps
+// WHERE sumDif=(SELECT MIN(ABS(lat-'.$targetLat.')+ABS(lon-'.$targetLon.')) FROM pointgps)
+//											   +MIN(ABS(lon-'.$targetLon.')) as sumDif

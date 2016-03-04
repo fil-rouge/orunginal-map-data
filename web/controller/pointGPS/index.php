@@ -3,10 +3,7 @@
 include_once('model/pointGPS/PointGpsService.php');
 include_once('model/pointGPS/PointGPS.class.php');
 
-function process_closer_point()
-{
-	// TODO
-}
+
 
 function display_points($limit)
 {
@@ -28,13 +25,21 @@ function display_points($limit)
 	return $points;
 }
 
-// Test get_by_coord
-// $pointFound = get_by_coord($points[0]->getLat(), $points[0]->getLon());
-// foreach($pointFound as $point) 
-// {
-// 	$pt = new PointGPS($point['idosm'],$point['lat'],$point['lon']);
-// 	$pt->display();
-// }
+/**********************************************************************************/
+//					METHODES USED WHEN ENDPOINT getParcours() CALLED
+/**********************************************************************************/
+
+/**
+*	Returns the lat, lon of the closest point to $aLat, $aLon
+*
+*/
+function process_closer_point($aLat, $aLon)
+{
+	$closestPoint = get_closer_point($aLat, $aLon, 5);
+	var_dump($closestPoint);
+}
+
+process_closer_point(45.740, 4.863);
 
 // Display view
 include_once(dirname(__DIR__).'/../view/pointGPS/index.php');
