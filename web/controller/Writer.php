@@ -1,6 +1,6 @@
 <?php
-
-/**
+echo "writer; ";
+/**echo "serializeDB";
 * Open $fileName & append $line at the end of the file
 *
 */
@@ -10,7 +10,7 @@ function append_to_file($fileName, $line)
 	$myfile = fopen($fileName, "a") or die("Unable to open file!");
 
 	//	Write line
-	fwrite($myfile, $line);
+	fwrite($myfile, $line.PHP_EOL);
 				
 	fclose($myfile);
 }
@@ -41,7 +41,7 @@ function reset_write_to_file($fileName, $line)
 	$myfile = fopen($fileName, "w") or die("Unable to open file!");
 
 	//	Write line
-	fwrite($myfile, $line);
+	fwrite($myfile, $line.PHP_EOL);
 				
 	fclose($myfile);
 }

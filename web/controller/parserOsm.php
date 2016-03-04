@@ -31,9 +31,6 @@ function start($parser,$element_name,$element_attrs) {
       //                $element_attrs['LON']);
     break;
     case "WAY":
-      global $countWay;
-      $countWay = $countWay + 1;
-      
       if ($parserOn)
       {
         $segments = get_segment_by_idosm($element_attrs['ID']);
@@ -264,7 +261,7 @@ $fp=fopen("dirname(__DIR__).'/../../files/osm/villeurbanneTout.osm","r");
 
 // Read data
 
-while ($data=fread($fp,4096)) {
+while ($data=fread($fp,4096) AND $countWay<2000) {
   $countWay = $countWay + 1;
   xml_parse($parser,$data,feof($fp)) or
   die (sprintf("XML Error: %s at line %d",

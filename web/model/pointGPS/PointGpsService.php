@@ -115,7 +115,7 @@ function insert_pointgps($anIdosm, $aLat, $aLon)
 	global $webDir;
 
 	//query to get ALL GPS points from database
-	$line='INSERT INTO pointGPS values ('.$anIdosm.','.$aLat.','.$aLon.');'.PHP_EOL;
+	$line='INSERT INTO pointGPS values ('.$anIdosm.','.$aLat.','.$aLon.');';
 	append_to_file($webDir.'/../scripts/insertPoints.sql', $line);
 	
 }
@@ -133,6 +133,31 @@ function get_point_by_id_from_s2p($id)
 	//query to get ALL GPS points from database
 	$qry = $bdd->prepare('SELECT * FROM segments2pointgps 
 						  WHERE idpointgps='.$id);
+
+	$qry->setFetchMode(PDO::FETCH_ASSOC);
+	$qry->execute();
+	$pointGPS = $qry->fetchAll();
+	
+	return $pointGPS;
+}
+
+/**********************************************************************************/
+//							DatabaseSerializer - SERVICES
+/**********************************************************************************/
+/**
+*	Returns all GPS points which are intersections with limit
+*
+*/
+function get_intersections($limit)
+{
+	//link to the global database connexion
+	global $bdd;
+
+	//query to get ALL GPS points from database
+	$qry = $bdd->prepare('SELECT idosm, lat, lon 
+						  FROM pointGPS p, segments2pointgps s2p
+						  WHERE isnode=true AND s2p.idpointgps=p.idosm
+						  LIMIT '.$limit);
 
 	$qry->setFetchMode(PDO::FETCH_ASSOC);
 	$qry->execute();

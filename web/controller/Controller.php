@@ -41,8 +41,11 @@ function analyzeRequest($request, $params)
 			// else
 			// 	print "erreur, paramétres non renseigner pour la requête getByLocalisation";
 			break;
-		case "dessinerGraphe":
-			// $this->dessinerGraphe();
+		case "serializeDB":
+			include_once($webDir.'/model/pointGPS/PointGpsService.php');
+			include_once($webDir.'/model/segment/SegmentService.php');
+			include_once('Writer.php');
+			include_once('DatabaseSerializer.php');
 			break;
 		default:
 			print "Action not found";

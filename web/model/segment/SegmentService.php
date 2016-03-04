@@ -359,3 +359,30 @@ function count_rows_in_segments()
 	
 	return $rows;
 }
+
+
+/**********************************************************************************/
+//							DatabaseSerializer - SERVICES
+/**********************************************************************************/
+/**
+*	Returns all ways which are intersections matching idsegment
+*
+*/
+function get_NDs_by_id($idsegment)
+{
+	//link to the global database connexion
+	global $bdd;
+
+	//query to get ALL GPS points from database
+	$qry = $bdd->prepare('SELECT *
+						  FROM segments2pointgps s2p
+						  WHERE idsegment='.$idsegment.' AND isnode=true');
+
+	$qry->setFetchMode(PDO::FETCH_ASSOC);
+	$qry->execute();
+	$rows = $qry->fetchAll();
+	
+	return $rows;
+}
+
+
