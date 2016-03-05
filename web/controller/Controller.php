@@ -26,6 +26,9 @@ function analyzeRequest($request, $params)
 	switch($request)
 	{
 		case "displayPoints":
+		$arr[5]=true;
+		var_dump($arr[5]);
+		var_dump($arr[6]);
 			// Display view
 			include_once($webDir.'/view/pointGPS/index.php');
 		break;
@@ -109,11 +112,58 @@ function getRoutes($params)
 	$selectedSegments = get_segments_in_rectangle($latMin, $lonMin, $latMax, $lonMax);
 	var_dump(count($selectedSegments));
 	//	3. Print the located segments to param.json file
+	format_response_nodes_ways($selectedSegments, $distance);
+
+	//	4. Call algorithm to find solutions
+}
+
+/**
+*	Formats the response from service to proper array
+*	to print it in param.json
+*/
+function format_response_nodes_ways($response, $distance)
+{
+	global $webDir;
+	$fileParam = $webDir.'/../files/json/param.json';
+
+	$resFormated[0]['nom'] = 'param';
+	$resFormated[0]['resultat'] = array('distance' => $distance);
+
+	$resFormated[1]['nom'] = 'points';
+	$resFormated[1]['resultat'] = array();
+
+	$resFormated[2]['nom'] = 'arete';
+	$resFormated[2]['resultat'] = array();
+
+	//	Structure to remember which nodes were added -> to add each node only once
+	$alreadyAdded = array();
+
+	foreach ($response as $segment) 
+	{
+		if (!in_array($segment['idnodea'], $alreadyAdded))
+		{
+			// Not found
+			$alreadyAdded[] = $segment['idnodea'];
+			$resFormated[1]['resultat'][] = array('id' => $segment['idnodea'],
+												  'lat' => $segment['lata'],
+												  'lng' => $segment['lona']);
+		}
+		if (!in_array($segment['idnodeb'], $alreadyAdded))
+		{
+			// Not found
+			$alreadyAdded[] = $segment['idnodeb'];
+			$resFormated[1]['resultat'][] = array('id' => $segment['idnodeb'],
+												  'lat' => $segment['latb'],
+												  'lng' => $segment['lonb']);
+		}
+
+		$resFormated[2]['resultat'][] = array('id' => $segment['id'], 
+											  'id_a' => $segment['idnodea'],
+											  'id_b' => $segment['idnodeb'], 
+											  'distance' => $segment['distance']);
+	}
+
 	reset_write_to_file($fileParam, "");
-	append_to_file_json($fileParam, $selectedSegments);
-	// foreach ($selectedSegments as $segment) 
-	// {
-	// 	append_to_file_json($fileParam, $segment);
-	// }
+	append_to_file_json($fileParam, $resFormated);
 }
 
