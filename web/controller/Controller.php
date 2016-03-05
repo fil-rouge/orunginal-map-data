@@ -62,13 +62,13 @@ function analyzeRequest($request, $params)
 
 		default:
 			print "Action not found";
-			break;			
+			break;
 	}
 }
 
 /**
 *	Returns the routes matching the criterias from $params
-*	
+*
 *	0. Extract the parameters
 *	1. Get closer point to $deb & closer point to $fin
 *	2. Get segments contained in the rectangle area
@@ -81,13 +81,13 @@ function getRoutes($params)
 {
 	//format the params to get only the name
 	$paramsFormatted = explode(";", $params, 9);
-	
+
 	//	START & END POINTS
 	$latDeb = $paramsFormatted[0];
 	$lonDeb = $paramsFormatted[1];
 	$latFin = $paramsFormatted[2];
 	$lonFin = $paramsFormatted[3];
-	
+
 	//	RECTANGLE COORDINATES
 	$lat1 = $paramsFormatted[4];
 	$lat2 = $paramsFormatted[5];
@@ -105,3 +105,24 @@ function getRoutes($params)
 
 }
 
+function buildSolutionsFromSegments($idDeb)
+{
+	$contents = fread(fopen('output.json', "r"), filesize('output.json'));
+	$contents = json_decode($contents);
+
+	$tab = array();
+	$i=0;
+	foreach($contents->solutions as $sol)
+	{
+		$solution = array();
+		foreach($sol->arcs as $arc)
+		{
+			$points = get_segment_points_ordered($arc->idArc, $arc->noeudDeb == "Deb" ? $idDeb : $arc->noeudDeb);
+			$solution = array_merge($solution, $points);
+		}
+		$tab[$i++] = $solution;
+	}
+
+	print json_encode($tab);
+	return $tab;
+}
