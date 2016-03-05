@@ -1,10 +1,18 @@
 <?php
+
 $webDir = dirname(__DIR__);
 include_once($webDir.'/model/connexion_sql.php');
+include_once('Writer.php');
 
 //----- POINTGPS
-include_once('model/pointGPS/PointGpsService.php');
-include_once('model/pointGPS/PointGPS.class.php');
+include_once($webDir.'/model/pointGPS/PointGPS.class.php');
+include_once($webDir.'/model/pointGPS/PointGpsService.php');
+include_once('pointGPS/index.php');
+
+//----- SEGMENTS
+include_once($webDir.'/model/segment/SegmentService.php');
+include_once('segment/index.php');
+
 
 /**
  * Process action corresponding to http get from main
@@ -18,27 +26,22 @@ function analyzeRequest($request, $params)
 	switch($request)
 	{
 		case "displayPoints":
-			include_once('pointGPS/index.php');
-			break;
+			// Display view
+			include_once($webDir.'/view/pointGPS/index.php');
+		break;
 
 		case "displaySegments":
-			include_once('segment/index.php');
-			break;
-
-		case "displayNodes":
-			include_once('node/index.php');
-			break;
+			// Display view
+			include_once($webDir.'/view/segment/index.php');
+		break;
 
 		case "parse":
-			include_once($webDir.'/model/pointGPS/PointGpsService.php');
-			include_once($webDir.'/model/pointGPS/PointGPS.class.php');
-			include_once($webDir.'/model/segment/SegmentService.php');
-			include_once('Writer.php');
+			//	Populate DB
 			include_once('parserOsm.php');
-			break;
+		break;
 
 		case "getDistances":
-			include_once($webDir.'/controller/segment/index.php');
+			//	Write distances to script scripts/setDistances.sql
 			update_distances(10000);
 			echo "DONE : Check file scripts/setDistance.sql !<br/>";
 			break;
@@ -51,12 +54,12 @@ function analyzeRequest($request, $params)
 			else
 				print "ERROR: No parameters !";
 			break;
+
 		case "serializeDB":
-			include_once($webDir.'/model/pointGPS/PointGpsService.php');
-			include_once($webDir.'/model/segment/SegmentService.php');
-			include_once('Writer.php');
+			//	Write to file .OSM all the points & segments of DB
 			include_once('DatabaseSerializer.php');
-			break;
+		break;
+
 		default:
 			print "Action not found";
 			break;			

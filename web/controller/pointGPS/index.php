@@ -38,5 +38,4 @@ function process_closer_point($aLat, $aLon)
 
 //process_closer_point(45.7405571, 4.8638673);
 
-// Display view
-include_once(dirname(__DIR__).'/../view/pointGPS/index.php');
+

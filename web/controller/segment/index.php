@@ -166,5 +166,3 @@ function get_distance($lat1, $lon1, $lat2, $lon2)
 }
 
 
-// Display view
-include_once(dirname(__DIR__).'/../view/segment/index.php');
