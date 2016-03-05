@@ -59,6 +59,9 @@ function analyzeRequest($request, $params)
 			//	Write to file .OSM all the points & segments of DB
 			include_once('DatabaseSerializer.php');
 		break;
+		case "returnResult":
+			buildSolutionsFromSegments(126079);
+		break;
 
 		default:
 			print "Action not found";
@@ -111,30 +114,34 @@ function getRoutes($params)
 	//	3. Print the located segments to param.json file
 	reset_write_to_file($fileParam, "");
 	append_to_file_json($fileParam, $selectedSegments);
-	// foreach ($selectedSegments as $segment) 
+	// foreach ($selectedSegments as $segment)
 	// {
 	// 	append_to_file_json($fileParam, $segment);
 	// }
 }
 
+/**
+* Returns for each solution found all its points
+*/
 function buildSolutionsFromSegments($idDeb)
 {
-	$contents = fread(fopen('output.json', "r"), filesize('output.json'));
+	global $webDir;
+	$file = $webDir.'/../files/json/output.json';
+
+	$contents = fread(fopen($file, "r"), filesize($file));
 	$contents = json_decode($contents);
 
 	$tab = array();
-	$i=0;
 	foreach($contents->solutions as $sol)
 	{
 		$solution = array();
 		foreach($sol->arcs as $arc)
 		{
-			$points = get_segment_points_ordered($arc->idArc, $arc->noeudDeb == "Deb" ? $idDeb : $arc->noeudDeb);
+			$points = get_segment_points_ordered($arc->idArc, $arc->noeudDeb == "deb" ? $idDeb : $arc->noeudDeb);
 			$solution = array_merge($solution, $points);
 		}
-		$tab[$i++] = $solution;
+		$tab[] = $solution;
 	}
-
+	header('Content-Type: application/json');
 	print json_encode($tab);
-	return $tab;
 }

@@ -1,0 +1,33 @@
+{
+    "solutions": [
+        {
+            "distanceTotale": 2.059330701828003,
+            "categorie": 1,
+            "noteTotale": 2.911004066467285,
+            "arcs": [
+                {
+                    "idArc": 1,
+                    "noeudDeb": "deb",
+                    "noeudFin": "13445137"
+                },
+                {
+                    "idArc": 2,
+                    "noeudDeb": "8876507",
+                    "noeudFin": "8876582"
+                }
+              ]
+        },
+        {
+          "distanceTotale": 2.059330701828003,
+          "categorie": 1,
+          "noteTotale": 2.911004066467285,
+          "arcs": [
+              {
+                  "idArc": 2,
+                  "noeudDeb": "8876507",
+                  "noeudFin": "8876582"
+              }
+            ]
+        }
+    ]
+}
