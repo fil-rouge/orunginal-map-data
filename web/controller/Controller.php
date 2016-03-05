@@ -2,6 +2,10 @@
 $webDir = dirname(__DIR__);
 include_once($webDir.'/model/connexion_sql.php');
 
+//----- POINTGPS
+include_once('model/pointGPS/PointGpsService.php');
+include_once('model/pointGPS/PointGPS.class.php');
+
 /**
  * Process action corresponding to http get from main
  * @param unknown $request
@@ -90,5 +94,11 @@ function getRoutes($params)
 	//	DISTANCE
 	$distance = $paramsFormatted[8];
 
+	//	1. Get closer point to $deb & closer point to $fin
+	$closestDeb = process_closer_point($latDeb, $lonDeb);
+	$closestFin = process_closer_point($latFin, $lonFin);
+
+
 
 }
+
