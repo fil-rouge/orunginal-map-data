@@ -294,6 +294,7 @@ function buildSolutionsFromSegments($idDeb)
 	$contents = json_decode($contents);
 
 	$tab = array();
+	$i = 0;
 	foreach($contents->solutions as $sol)
 	{
 		$solution = array();
@@ -302,7 +303,7 @@ function buildSolutionsFromSegments($idDeb)
 			$points = get_segment_points_ordered($arc->idArc, $arc->noeudDeb == "deb" ? $idDeb : $arc->noeudDeb);
 			$solution = array_merge($solution, $points);
 		}
-		$tab[] = $solution;
+		$tab["Solution".++$i] = $solution;
 	}
 	header('Content-Type: application/json');
 	print json_encode($tab);

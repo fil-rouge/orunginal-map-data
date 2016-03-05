@@ -137,7 +137,7 @@ function get_segment_points_ordered($idSegment, $idStartPoint)
 		// GPS points are in the RIGHT ORDER
 		foreach($pointsDB as $point)
 		{
-			$points[] = Array("idosm" => $point['idosm'], "lat" => $point['lat'], "lon" => $point['lon']);
+			$points[] = Array("id" => $point['idosm'], "lat" => $point['lat'], "lon" => $point['lon']);
 		}
 	}
 	else if ($pointsDB[$pointsLength-1]['idosm']==$idStartPoint)
@@ -146,7 +146,7 @@ function get_segment_points_ordered($idSegment, $idStartPoint)
 		$i = $pointsLength - 1;
 		foreach($pointsDB as $point)
 		{
-			$points[$i] = Array("idosm" => $point['idosm'], "lat" => $point['lat'], "lon" => $point['lon']);
+			$points[$i] = Array("id" => $point['idosm'], "lat" => $point['lat'], "lon" => $point['lon']);
 			$i--;
 		}
 	}
