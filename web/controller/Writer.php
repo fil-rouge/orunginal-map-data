@@ -26,7 +26,7 @@ function append_to_file_json($fileName, $content)
 	$myfile = fopen($fileName, "a") or die("Unable to open file!");
 
 	//	Write content in JSON to the file
-	fputs($myfile, json_encode($content));
+	fputs($myfile, json_encode($content, JSON_PRETTY_PRINT));
 	//var_dump($res);
 				
 	fclose($myfile);

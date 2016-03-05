@@ -160,3 +160,13 @@ function get_segment_points_ordered($idSegment, $idStartPoint)
 }
 
 //$points = get_segment_points_ordered(3,4);
+
+/**
+*	Returns segments contained in a rectangle area
+*	specified with $latMin, $lonMin, $latMax, $lonMax
+*/
+function get_segments_in_rectangle($latMin, $lonMin, $latMax, $lonMax)
+{
+	$segments = get_segment_from_position($latMin, $latMax, $lonMin, $lonMax);
+	return $segments;
+}
