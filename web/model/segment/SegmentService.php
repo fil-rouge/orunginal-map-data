@@ -82,11 +82,11 @@ function get_segment_from_position($latMin, $latMax, $lonMin, $lonMax)
 
 						   WHERE EXISTS(SELECT NULL
 						                  FROM segments2pointgps s2p, pointgps p
-						                 WHERE s.id=s2p.idsegment AND s2p.idpointgps = p.id
+						                 WHERE s.id=s2p.idsegment AND s2p.idpointgps = p.idosm
 						                HAVING MIN(p.lat) > '.$latMin.' AND MAX(p.lat) < '.$latMax.' AND
 						                	   MIN(p.lon) > '.$lonMin.' AND MAX(p.lon) < '.$lonMax.')
 
-						 		  AND idnodea=pa.id AND idnodeb=pb.id');
+						 		  AND idnodea=pa.idosm AND idnodeb=pb.idosm');
 
 	$qry->setFetchMode(PDO::FETCH_ASSOC);
 	$qry->execute();

@@ -79,6 +79,9 @@ function analyzeRequest($request, $params)
 */
 function getRoutes($params)
 {
+	global $webDir;
+	$fileParam = $webDir.'/../files/json/param.json';
+
 	//format the params to get only the name
 	$paramsFormatted = explode(";", $params, 9);
 
@@ -89,20 +92,29 @@ function getRoutes($params)
 	$lonFin = $paramsFormatted[3];
 
 	//	RECTANGLE COORDINATES
-	$lat1 = $paramsFormatted[4];
-	$lat2 = $paramsFormatted[5];
-	$long1 = $paramsFormatted[6];
-	$long2 = $paramsFormatted[7];
+	$latMin = $paramsFormatted[4];
+	$latMax = $paramsFormatted[5];
+	$lonMin = $paramsFormatted[6];
+	$lonMax = $paramsFormatted[7];
 
 	//	DISTANCE
 	$distance = $paramsFormatted[8];
 
-	//	1. Get closer point to $deb & closer point to $fin
+	//	1. Get closer points to $deb & closer point to $fin
 	$closestDeb = process_closer_point($latDeb, $lonDeb);
+	var_dump($closestDeb);
 	$closestFin = process_closer_point($latFin, $lonFin);
-
-
-
+	var_dump($closestFin);
+	//	2. Get segments contained in the rectangle area
+	$selectedSegments = get_segments_in_rectangle($latMin, $lonMin, $latMax, $lonMax);
+	var_dump(count($selectedSegments));
+	//	3. Print the located segments to param.json file
+	reset_write_to_file($fileParam, "");
+	append_to_file_json($fileParam, $selectedSegments);
+	// foreach ($selectedSegments as $segment) 
+	// {
+	// 	append_to_file_json($fileParam, $segment);
+	// }
 }
 
 function buildSolutionsFromSegments($idDeb)
