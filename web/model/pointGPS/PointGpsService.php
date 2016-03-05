@@ -171,9 +171,3 @@ function get_closer_point($targetLat, $targetLon)
 	
 	return $pointGPS;
 }
-
-// // SELECT MIN(ABS(lat-'.$targetLat.')+
-// 								 ABS(lon-'.$targetLon.')) as sumDif
-// 						  FROM pointgps
-// WHERE sumDif=(SELECT MIN(ABS(lat-'.$targetLat.')+ABS(lon-'.$targetLon.')) FROM pointgps)
-//											   +MIN(ABS(lon-'.$targetLon.')) as sumDif

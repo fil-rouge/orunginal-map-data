@@ -1,6 +1,8 @@
 <?php
 
-
+/*********************************************************************************/
+//									  DISPLAY METHODS
+/*********************************************************************************/
 
 function display_points($limit)
 {
@@ -10,7 +12,6 @@ function display_points($limit)
 
 	// Query 10 points from database
 	$pointsGPS = get_pointGPS($limit);
-	//$pointsGPS = get_closer_point(47,6,4);
 
 	// Data processing
 	$points = array();
@@ -22,9 +23,9 @@ function display_points($limit)
 	return $points;
 }
 
-/**********************************************************************************/
+/*********************************************************************************/
 //					METHODES USED WHEN ENDPOINT getParcours() CALLED
-/**********************************************************************************/
+/*********************************************************************************/
 
 /**
 *	Returns the lat, lon of the closest point to $aLat, $aLon
