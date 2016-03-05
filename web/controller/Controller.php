@@ -112,7 +112,7 @@ function getRoutes($params)
 	$selectedSegments = get_segments_in_rectangle($latMin, $lonMin, $latMax, $lonMax);
 	var_dump(count($selectedSegments));
 	//	3. Print the located segments to param.json file
-	format_response_nodes_ways($selectedSegments, $distance);
+	format_response_nodes_ways($selectedSegments, $distance, $closestDeb[0]['idosm'], $closestFin[0]['idosm']);
 
 	//	4. Call algorithm to find solutions
 }
@@ -121,7 +121,7 @@ function getRoutes($params)
 *	Formats the response from service to proper array
 *	to print it in param.json
 */
-function format_response_nodes_ways($response, $distance)
+function format_response_nodes_ways($response, $distance, $idDeb, $idFin)
 {
 	global $webDir;
 	$fileParam = $webDir.'/../files/json/param.json';
@@ -140,32 +140,141 @@ function format_response_nodes_ways($response, $distance)
 
 	foreach ($response as $segment) 
 	{
-		if (!in_array($segment['idnodea'], $alreadyAdded))
+		if ($segment['idnodea']==$idDeb)
 		{
-			// Not found
-			$alreadyAdded[] = $segment['idnodea'];
-			$resFormated[1]['resultat'][] = array('id' => $segment['idnodea'],
-												  'lat' => $segment['lata'],
-												  'lng' => $segment['lona']);
-		}
-		if (!in_array($segment['idnodeb'], $alreadyAdded))
-		{
-			// Not found
-			$alreadyAdded[] = $segment['idnodeb'];
-			$resFormated[1]['resultat'][] = array('id' => $segment['idnodeb'],
-												  'lat' => $segment['latb'],
-												  'lng' => $segment['lonb']);
-		}
+			//	Replace the id value with 'deb'
+		
+			if (!in_array($segment['idnodea'], $alreadyAdded))
+			{
+				// Not found
+				$alreadyAdded[] = $segment['idnodea'];
+				$resFormated[1]['resultat'][] = array('id' => 'deb',
+													  'lat' => $segment['lata'],
+													  'lng' => $segment['lona']);
+			}
+			if (!in_array($segment['idnodeb'], $alreadyAdded))
+			{
+				// Not found
+				$alreadyAdded[] = $segment['idnodeb'];
+				$resFormated[1]['resultat'][] = array('id' => $segment['idnodeb'],
+													  'lat' => $segment['latb'],
+													  'lng' => $segment['lonb']);
+			}
 
-		$resFormated[2]['resultat'][] = array('id' => $segment['id'], 
-											  'id_a' => $segment['idnodea'],
-											  'id_b' => $segment['idnodeb'], 
-											  'distance' => $segment['distance']);
+			$resFormated[2]['resultat'][] = array('id' => $segment['id'], 
+												  'id_a' => 'deb',
+												  'id_b' => $segment['idnodeb'], 
+												  'distance' => $segment['distance']);
+		}
+		elseif ($segment['idnodeb']==$idDeb) 
+		{
+			//	Replace the id value with 'deb'
+		
+			if (!in_array($segment['idnodea'], $alreadyAdded))
+			{
+				// Not found
+				$alreadyAdded[] = $segment['idnodea'];
+				$resFormated[1]['resultat'][] = array('id' => $segment['idnodea'],
+													  'lat' => $segment['lata'],
+													  'lng' => $segment['lona']);
+			}
+			if (!in_array($segment['idnodeb'], $alreadyAdded))
+			{
+				// Not found
+				$alreadyAdded[] = $segment['idnodeb'];
+				$resFormated[1]['resultat'][] = array('id' => 'deb',
+													  'lat' => $segment['latb'],
+													  'lng' => $segment['lonb']);
+			}
+
+			$resFormated[2]['resultat'][] = array('id' => $segment['id'], 
+												  'id_a' => $segment['idnodea'],
+												  'id_b' => 'deb', 
+												  'distance' => $segment['distance']);
+		}
+		elseif ($segment['idnodea']==$idFin) 
+		{
+			//	Replace the id value with 'deb'
+		
+			if (!in_array($segment['idnodea'], $alreadyAdded))
+			{
+				// Not found
+				$alreadyAdded[] = $segment['idnodea'];
+				$resFormated[1]['resultat'][] = array('id' => 'fin',
+													  'lat' => $segment['lata'],
+													  'lng' => $segment['lona']);
+			}
+			if (!in_array($segment['idnodeb'], $alreadyAdded))
+			{
+				// Not found
+				$alreadyAdded[] = $segment['idnodeb'];
+				$resFormated[1]['resultat'][] = array('id' => $segment['idnodeb'],
+													  'lat' => $segment['latb'],
+													  'lng' => $segment['lonb']);
+			}
+
+			$resFormated[2]['resultat'][] = array('id' => $segment['id'], 
+												  'id_a' => 'fin',
+												  'id_b' => $segment['idnodeb'], 
+												  'distance' => $segment['distance']);
+		}
+		elseif ($segment['idnodeb']==$idFin) 
+		{
+			//	Replace the id value with 'deb'
+		
+			if (!in_array($segment['idnodea'], $alreadyAdded))
+			{
+				// Not found
+				$alreadyAdded[] = $segment['idnodea'];
+				$resFormated[1]['resultat'][] = array('id' => $segment['idnodea'],
+													  'lat' => $segment['lata'],
+													  'lng' => $segment['lona']);
+			}
+			if (!in_array($segment['idnodeb'], $alreadyAdded))
+			{
+				// Not found
+				$alreadyAdded[] = $segment['idnodeb'];
+				$resFormated[1]['resultat'][] = array('id' => 'fin',
+													  'lat' => $segment['latb'],
+													  'lng' => $segment['lonb']);
+			}
+
+			$resFormated[2]['resultat'][] = array('id' => $segment['id'], 
+												  'id_a' => $segment['idnodea'],
+												  'id_b' => 'fin', 
+												  'distance' => $segment['distance']);
+		}
+		else
+		{
+		
+			if (!in_array($segment['idnodea'], $alreadyAdded))
+			{
+				// Not found
+				$alreadyAdded[] = $segment['idnodea'];
+				$resFormated[1]['resultat'][] = array('id' => $segment['idnodea'],
+													  'lat' => $segment['lata'],
+													  'lng' => $segment['lona']);
+			}
+			if (!in_array($segment['idnodeb'], $alreadyAdded))
+			{
+				// Not found
+				$alreadyAdded[] = $segment['idnodeb'];
+				$resFormated[1]['resultat'][] = array('id' => $segment['idnodeb'],
+													  'lat' => $segment['latb'],
+													  'lng' => $segment['lonb']);
+			}
+
+			$resFormated[2]['resultat'][] = array('id' => $segment['id'], 
+												  'id_a' => $segment['idnodea'],
+												  'id_b' => $segment['idnodeb'], 
+												  'distance' => $segment['distance']);
+		}
 	}
 
 	reset_write_to_file($fileParam, "");
 	append_to_file_json($fileParam, $resFormated);
 }
+
 
 function buildSolutionsFromSegments($idDeb)
 {
