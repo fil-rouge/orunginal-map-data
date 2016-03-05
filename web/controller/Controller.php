@@ -67,6 +67,9 @@ function analyzeRequest($request, $params)
 			//print_osm_ways(5500);
 			end_osm_file();
 		break;
+		case "returnResult":
+			buildSolutionsFromSegments(126079);
+		break;
 
 		default:
 			print "Action not found";
@@ -109,15 +112,15 @@ function getRoutes($params)
 	$distance = $paramsFormatted[8];
 
 	//	1. Get closer points to $deb & closer point to $fin
-	// $closestDeb = process_closer_point($latDeb, $lonDeb);
-	// var_dump($closestDeb);
-	// $closestFin = process_closer_point($latFin, $lonFin);
-	// var_dump($closestFin);
-	// //	2. Get segments contained in the rectangle area
-	// $selectedSegments = get_segments_in_rectangle($latMin, $lonMin, $latMax, $lonMax);
-	// var_dump(count($selectedSegments));
-	// //	3. Print the located segments to param.json file
-	// format_response_nodes_ways($selectedSegments, $distance, $closestDeb[0]['idosm'], $closestFin[0]['idosm']);
+	$closestDeb = process_closer_point($latDeb, $lonDeb);
+	var_dump($closestDeb);
+	$closestFin = process_closer_point($latFin, $lonFin);
+	var_dump($closestFin);
+	//	2. Get segments contained in the rectangle area
+	$selectedSegments = get_segments_in_rectangle($latMin, $lonMin, $latMax, $lonMax);
+	var_dump(count($selectedSegments));
+	//	3. Print the located segments to param.json file
+	format_response_nodes_ways($selectedSegments, $distance, $closestDeb[0]['idosm'], $closestFin[0]['idosm']);
 
 	//	4. Call algorithm to find solutions
 	call_algo();
@@ -145,19 +148,13 @@ function format_response_nodes_ways($response, $distance, $idDeb, $idFin)
 
 	//	Structure to remember which nodes were added -> to add each node only once
 	$alreadyAdded = array();
-	$fileOsm=dirname(__DIR__).'/../files/osm/database.osm';
-	reset_osm_file();
+
 	foreach ($response as $segment) 
 	{
-		$line = "<node id='".$segment['idnodea']."' lat='".$segment['lata']."' lon='".$segment['lona']."'/>";
-		append_to_file($fileOsm, $line);
-		$line = "<node id='".$segment['idnodeb']."' lat='".$segment['latb']."' lon='".$segment['lonb']."'/>";
-		append_to_file($fileOsm, $line);
-
 		if ($segment['idnodea']==$idDeb)
 		{
 			//	Replace the id value with 'deb'
-		
+
 			if (!in_array($segment['idnodea'], $alreadyAdded))
 			{
 				// Not found
@@ -175,15 +172,15 @@ function format_response_nodes_ways($response, $distance, $idDeb, $idFin)
 													  'lng' => $segment['lonb']);
 			}
 
-			$resFormated[2]['resultat'][] = array('id' => $segment['id'], 
+			$resFormated[2]['resultat'][] = array('id' => $segment['id'],
 												  'id_a' => 'deb',
 												  'id_b' => "".$segment['idnodeb']."", 
 												  'distance' => $segment['distance']);
 		}
-		elseif ($segment['idnodeb']==$idDeb) 
+		elseif ($segment['idnodeb']==$idDeb)
 		{
 			//	Replace the id value with 'deb'
-		
+
 			if (!in_array($segment['idnodea'], $alreadyAdded))
 			{
 				// Not found
@@ -203,13 +200,13 @@ function format_response_nodes_ways($response, $distance, $idDeb, $idFin)
 
 			$resFormated[2]['resultat'][] = array('id' => $segment['id'], 
 												  'id_a' => "".$segment['idnodea']."",
-												  'id_b' => 'deb', 
+												  'id_b' => 'deb',
 												  'distance' => $segment['distance']);
 		}
-		elseif ($segment['idnodea']==$idFin) 
+		elseif ($segment['idnodea']==$idFin)
 		{
 			//	Replace the id value with 'deb'
-		
+
 			if (!in_array($segment['idnodea'], $alreadyAdded))
 			{
 				// Not found
@@ -227,15 +224,15 @@ function format_response_nodes_ways($response, $distance, $idDeb, $idFin)
 													  'lng' => $segment['lonb']);
 			}
 
-			$resFormated[2]['resultat'][] = array('id' => $segment['id'], 
+			$resFormated[2]['resultat'][] = array('id' => $segment['id'],
 												  'id_a' => 'fin',
 												  'id_b' => "".$segment['idnodeb']."", 
 												  'distance' => $segment['distance']);
 		}
-		elseif ($segment['idnodeb']==$idFin) 
+		elseif ($segment['idnodeb']==$idFin)
 		{
 			//	Replace the id value with 'deb'
-		
+
 			if (!in_array($segment['idnodea'], $alreadyAdded))
 			{
 				// Not found
@@ -260,7 +257,7 @@ function format_response_nodes_ways($response, $distance, $idDeb, $idFin)
 		}
 		else
 		{
-		
+
 			if (!in_array($segment['idnodea'], $alreadyAdded))
 			{
 				// Not found
@@ -284,30 +281,33 @@ function format_response_nodes_ways($response, $distance, $idDeb, $idFin)
 												  'distance' => $segment['distance']);
 		}
 	}
-	end_osm_file();
 	reset_write_to_file($fileParam, "");
 	append_to_file_json($fileParam, $resFormated);
 }
 
-
+/**
+* Returns for each solution found all its points
+*/
 function buildSolutionsFromSegments($idDeb)
 {
-	$contents = fread(fopen('output.json', "r"), filesize('output.json'));
+	global $webDir;
+	$file = $webDir.'/../files/json/output.json';
+
+	$contents = fread(fopen($file, "r"), filesize($file));
 	$contents = json_decode($contents);
 
 	$tab = array();
-	$i=0;
+	$i = 0;
 	foreach($contents->solutions as $sol)
 	{
 		$solution = array();
 		foreach($sol->arcs as $arc)
 		{
-			$points = get_segment_points_ordered($arc->idArc, $arc->noeudDeb == "Deb" ? $idDeb : $arc->noeudDeb);
+			$points = get_segment_points_ordered($arc->idArc, $arc->noeudDeb == "deb" ? $idDeb : $arc->noeudDeb);
 			$solution = array_merge($solution, $points);
 		}
-		$tab[$i++] = $solution;
+		$tab["Solution".++$i] = $solution;
 	}
-
+	header('Content-Type: application/json');
 	print json_encode($tab);
-	return $tab;
 }

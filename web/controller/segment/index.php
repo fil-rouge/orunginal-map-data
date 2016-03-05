@@ -81,13 +81,13 @@ function update_distances($limit)
 
 	$segments = get_segment($limit);
 
-	foreach ($segments as $segment) 
+	foreach ($segments as $segment)
 	{
 		$segmentPoints = get_segment_points_by_id($segment['id']);
 		$distance = 0;
 		$nbPoints = count($segmentPoints);
-		for ($i=0; $i < $nbPoints-1; $i++) 
-		{ 
+		for ($i=0; $i < $nbPoints-1; $i++)
+		{
 			$distance = $distance + get_distance($segmentPoints[$i]['lat'],
 												 $segmentPoints[$i]['lon'],
 												 $segmentPoints[$i+1]['lat'],
@@ -101,12 +101,12 @@ function update_distances($limit)
 
 /**
 * 	Returns the distance between two gps points
-* 	
+*
 */
-function get_distance($lat1, $lon1, $lat2, $lon2) 
+function get_distance($lat1, $lon1, $lat2, $lon2)
 {
   $theta = $lon1 - $lon2;
-  $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  
+  $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +
   		  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
   $dist = acos($dist);
   $dist = rad2deg($dist);
@@ -131,22 +131,22 @@ function get_segment_points_ordered($idSegment, $idStartPoint)
 	// Data processing
 	$points = array();
 	$pointsLength = count($pointsDB);
-	
-	if ($pointsDB[0]['id']==$idStartPoint)
+
+	if ($pointsDB[0]['idosm']==$idStartPoint)
 	{
 		// GPS points are in the RIGHT ORDER
-		foreach($pointsDB as $point) 
+		foreach($pointsDB as $point)
 		{
-			$points[] = new PointGPS($point['id'],$point['lat'],$point['lon']);
+			$points[] = Array("id" => $point['idosm'], "lat" => $point['lat'], "lon" => $point['lon']);
 		}
 	}
-	else if ($pointsDB[$pointsLength-1]['id']==$idStartPoint)
+	else if ($pointsDB[$pointsLength-1]['idosm']==$idStartPoint)
 	{
 		// GPS points are in the REVERSE ORDER
 		$i = $pointsLength - 1;
-		foreach($pointsDB as $point) 
+		foreach($pointsDB as $point)
 		{
-			$points[$i] = new PointGPS($point['id'],$point['lat'],$point['lon']);
+			$points[$i] = Array("id" => $point['idosm'], "lat" => $point['lat'], "lon" => $point['lon']);
 			$i--;
 		}
 	}
@@ -155,7 +155,7 @@ function get_segment_points_ordered($idSegment, $idStartPoint)
 		echo '<br/><strong>ERROR:[get_segment_points_by_id] idStartPoint incorrect !!</strong><br/>';
 	}
 
-	print json_encode($pointsDB);
+	//print json_encode($pointsDB);
 	return $points;
 }
 

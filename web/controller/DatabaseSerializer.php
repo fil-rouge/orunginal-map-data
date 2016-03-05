@@ -1,6 +1,4 @@
 <?php
-echo "dbserializer; ";
-
 
 /**
 *	Reset & print header to osm file
