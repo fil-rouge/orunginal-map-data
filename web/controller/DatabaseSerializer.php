@@ -2,13 +2,6 @@
 echo "dbserializer; ";
 
 
-
-
-reset_osm_file();
-print_osm_nodes(2500);
-//print_osm_ways(5500);
-end_osm_file();
-
 /**
 *	Reset & print header to osm file
 */

@@ -3,6 +3,8 @@
 $webDir = dirname(__DIR__);
 include_once($webDir.'/model/connexion_sql.php');
 include_once('Writer.php');
+include_once('DatabaseSerializer.php');
+include_once($webDir.'/ExecAlgo.php');
 
 //----- POINTGPS
 include_once($webDir.'/model/pointGPS/PointGPS.class.php');
@@ -60,7 +62,10 @@ function analyzeRequest($request, $params)
 
 		case "serializeDB":
 			//	Write to file .OSM all the points & segments of DB
-			include_once('DatabaseSerializer.php');
+			reset_osm_file();
+			print_osm_nodes(2500);
+			//print_osm_ways(5500);
+			end_osm_file();
 		break;
 
 		default:
@@ -104,18 +109,21 @@ function getRoutes($params)
 	$distance = $paramsFormatted[8];
 
 	//	1. Get closer points to $deb & closer point to $fin
-	$closestDeb = process_closer_point($latDeb, $lonDeb);
-	var_dump($closestDeb);
-	$closestFin = process_closer_point($latFin, $lonFin);
-	var_dump($closestFin);
-	//	2. Get segments contained in the rectangle area
-	$selectedSegments = get_segments_in_rectangle($latMin, $lonMin, $latMax, $lonMax);
-	var_dump(count($selectedSegments));
-	//	3. Print the located segments to param.json file
-	format_response_nodes_ways($selectedSegments, $distance, $closestDeb[0]['idosm'], $closestFin[0]['idosm']);
+	// $closestDeb = process_closer_point($latDeb, $lonDeb);
+	// var_dump($closestDeb);
+	// $closestFin = process_closer_point($latFin, $lonFin);
+	// var_dump($closestFin);
+	// //	2. Get segments contained in the rectangle area
+	// $selectedSegments = get_segments_in_rectangle($latMin, $lonMin, $latMax, $lonMax);
+	// var_dump(count($selectedSegments));
+	// //	3. Print the located segments to param.json file
+	// format_response_nodes_ways($selectedSegments, $distance, $closestDeb[0]['idosm'], $closestFin[0]['idosm']);
 
 	//	4. Call algorithm to find solutions
+	call_algo();
 }
+
+
 
 /**
 *	Formats the response from service to proper array
@@ -137,9 +145,15 @@ function format_response_nodes_ways($response, $distance, $idDeb, $idFin)
 
 	//	Structure to remember which nodes were added -> to add each node only once
 	$alreadyAdded = array();
-
+	$fileOsm=dirname(__DIR__).'/../files/osm/database.osm';
+	reset_osm_file();
 	foreach ($response as $segment) 
 	{
+		$line = "<node id='".$segment['idnodea']."' lat='".$segment['lata']."' lon='".$segment['lona']."'/>";
+		append_to_file($fileOsm, $line);
+		$line = "<node id='".$segment['idnodeb']."' lat='".$segment['latb']."' lon='".$segment['lonb']."'/>";
+		append_to_file($fileOsm, $line);
+
 		if ($segment['idnodea']==$idDeb)
 		{
 			//	Replace the id value with 'deb'
@@ -156,14 +170,14 @@ function format_response_nodes_ways($response, $distance, $idDeb, $idFin)
 			{
 				// Not found
 				$alreadyAdded[] = $segment['idnodeb'];
-				$resFormated[1]['resultat'][] = array('id' => $segment['idnodeb'],
+				$resFormated[1]['resultat'][] = array('id' => "".$segment['idnodeb']."",
 													  'lat' => $segment['latb'],
 													  'lng' => $segment['lonb']);
 			}
 
 			$resFormated[2]['resultat'][] = array('id' => $segment['id'], 
 												  'id_a' => 'deb',
-												  'id_b' => $segment['idnodeb'], 
+												  'id_b' => "".$segment['idnodeb']."", 
 												  'distance' => $segment['distance']);
 		}
 		elseif ($segment['idnodeb']==$idDeb) 
@@ -174,7 +188,7 @@ function format_response_nodes_ways($response, $distance, $idDeb, $idFin)
 			{
 				// Not found
 				$alreadyAdded[] = $segment['idnodea'];
-				$resFormated[1]['resultat'][] = array('id' => $segment['idnodea'],
+				$resFormated[1]['resultat'][] = array('id' => "".$segment['idnodea']."",
 													  'lat' => $segment['lata'],
 													  'lng' => $segment['lona']);
 			}
@@ -188,7 +202,7 @@ function format_response_nodes_ways($response, $distance, $idDeb, $idFin)
 			}
 
 			$resFormated[2]['resultat'][] = array('id' => $segment['id'], 
-												  'id_a' => $segment['idnodea'],
+												  'id_a' => "".$segment['idnodea']."",
 												  'id_b' => 'deb', 
 												  'distance' => $segment['distance']);
 		}
@@ -208,14 +222,14 @@ function format_response_nodes_ways($response, $distance, $idDeb, $idFin)
 			{
 				// Not found
 				$alreadyAdded[] = $segment['idnodeb'];
-				$resFormated[1]['resultat'][] = array('id' => $segment['idnodeb'],
+				$resFormated[1]['resultat'][] = array('id' => "".$segment['idnodeb']."",
 													  'lat' => $segment['latb'],
 													  'lng' => $segment['lonb']);
 			}
 
 			$resFormated[2]['resultat'][] = array('id' => $segment['id'], 
 												  'id_a' => 'fin',
-												  'id_b' => $segment['idnodeb'], 
+												  'id_b' => "".$segment['idnodeb']."", 
 												  'distance' => $segment['distance']);
 		}
 		elseif ($segment['idnodeb']==$idFin) 
@@ -226,7 +240,7 @@ function format_response_nodes_ways($response, $distance, $idDeb, $idFin)
 			{
 				// Not found
 				$alreadyAdded[] = $segment['idnodea'];
-				$resFormated[1]['resultat'][] = array('id' => $segment['idnodea'],
+				$resFormated[1]['resultat'][] = array('id' => "".$segment['idnodea']."",
 													  'lat' => $segment['lata'],
 													  'lng' => $segment['lona']);
 			}
@@ -240,7 +254,7 @@ function format_response_nodes_ways($response, $distance, $idDeb, $idFin)
 			}
 
 			$resFormated[2]['resultat'][] = array('id' => $segment['id'], 
-												  'id_a' => $segment['idnodea'],
+												  'id_a' => "".$segment['idnodea']."",
 												  'id_b' => 'fin', 
 												  'distance' => $segment['distance']);
 		}
@@ -251,7 +265,7 @@ function format_response_nodes_ways($response, $distance, $idDeb, $idFin)
 			{
 				// Not found
 				$alreadyAdded[] = $segment['idnodea'];
-				$resFormated[1]['resultat'][] = array('id' => $segment['idnodea'],
+				$resFormated[1]['resultat'][] = array('id' => "".$segment['idnodea']."",
 													  'lat' => $segment['lata'],
 													  'lng' => $segment['lona']);
 			}
@@ -259,18 +273,18 @@ function format_response_nodes_ways($response, $distance, $idDeb, $idFin)
 			{
 				// Not found
 				$alreadyAdded[] = $segment['idnodeb'];
-				$resFormated[1]['resultat'][] = array('id' => $segment['idnodeb'],
+				$resFormated[1]['resultat'][] = array('id' => "".$segment['idnodeb']."",
 													  'lat' => $segment['latb'],
 													  'lng' => $segment['lonb']);
 			}
 
 			$resFormated[2]['resultat'][] = array('id' => $segment['id'], 
-												  'id_a' => $segment['idnodea'],
-												  'id_b' => $segment['idnodeb'], 
+												  'id_a' => "".$segment['idnodea']."",
+												  'id_b' => "".$segment['idnodeb']."", 
 												  'distance' => $segment['distance']);
 		}
 	}
-
+	end_osm_file();
 	reset_write_to_file($fileParam, "");
 	append_to_file_json($fileParam, $resFormated);
 }
