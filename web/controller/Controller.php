@@ -67,6 +67,7 @@ function analyzeRequest($request, $params)
 			//print_osm_ways(5500);
 			end_osm_file();
 		break;
+
 		case "returnResult":
 			buildSolutionsFromSegments(126079);
 		break;
@@ -113,17 +114,21 @@ function getRoutes($params)
 
 	//	1. Get closer points to $deb & closer point to $fin
 	$closestDeb = process_closer_point($latDeb, $lonDeb);
-	var_dump($closestDeb);
+
 	$closestFin = process_closer_point($latFin, $lonFin);
-	var_dump($closestFin);
+
 	//	2. Get segments contained in the rectangle area
 	$selectedSegments = get_segments_in_rectangle($latMin, $lonMin, $latMax, $lonMax);
-	var_dump(count($selectedSegments));
+
 	//	3. Print the located segments to param.json file
 	format_response_nodes_ways($selectedSegments, $distance, $closestDeb[0]['idosm'], $closestFin[0]['idosm']);
 
 	//	4. Call algorithm to find solutions
 	call_algo();
+
+	// 	5. Fill the solutions with the GPS points for the app to display the solutions
+	// 	6. Return the solutions to the app
+	buildSolutionsFromSegments($closestDeb[0]['idosm']);
 }
 
 
@@ -308,6 +313,6 @@ function buildSolutionsFromSegments($idDeb)
 		}
 		$tab["Solution".++$i] = $solution;
 	}
-	header('Content-Type: application/json');
+	header('Content-Type: application/json', JSON_PRETTY_PRINT);
 	print json_encode($tab);
 }

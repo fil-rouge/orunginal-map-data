@@ -152,10 +152,9 @@ function get_segment_points_ordered($idSegment, $idStartPoint)
 	}
 	else
 	{
-		echo '<br/><strong>ERROR:[get_segment_points_by_id] idStartPoint incorrect !!</strong><br/>';
+		//echo '<br/><strong>ERROR:[get_segment_points_by_id] idStartPoint incorrect !!</strong><br/>';
 	}
 
-	//print json_encode($pointsDB);
 	return $points;
 }
 

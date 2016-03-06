@@ -157,13 +157,16 @@ function get_closer_point($targetLat, $targetLon)
 
 	//query to get ALL GPS points from database
 	$qry = $bdd->prepare('SELECT idosm, lat, lon
-						  FROM pointgps
+						  FROM pointgps p, segments2pointgps s2p
 						  WHERE (ABS(lat-'.$targetLat.')+
 								 ABS(lon-'.$targetLon.'))=
 
 						  	(SELECT MIN(ABS(lat-'.$targetLat.')+
 								 ABS(lon-'.$targetLon.'))
-							FROM pointgps)');
+							FROM pointgps)
+
+								AND s2p.isnode = true 
+								AND s2p.idpointgps=p.idosm');
 
 	$qry->setFetchMode(PDO::FETCH_ASSOC);
 	$qry->execute();

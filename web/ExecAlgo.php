@@ -9,6 +9,4 @@ function call_algo()
 	$output = dirname(__DIR__).'/files/json/output.json';
 
 	$ret = shell_exec("./algo ".$param." ".$output);
-	var_dump($ret);
-
 }
