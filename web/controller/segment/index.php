@@ -144,9 +144,10 @@ function get_segment_points_ordered($idSegment, $idStartPoint)
 	{
 		// GPS points are in the REVERSE ORDER
 		$i = $pointsLength - 1;
-		foreach($pointsDB as $point)
+		while($i > 0)
 		{
-			$points[$i] = Array("id" => $point['idosm'], "lat" => $point['lat'], "lon" => $point['lon']);
+			$point = $pointsDB[$i];
+			$points[] = Array("id" => $point['idosm'], "lat" => $point['lat'], "lon" => $point['lon']);
 			$i--;
 		}
 	}

@@ -69,7 +69,7 @@ function analyzeRequest($request, $params)
 		break;
 
 		case "returnResult":
-			buildSolutionsFromSegments(126079);
+			buildSolutionsFromSegments(1678246930);
 		break;
 
 		default:
@@ -154,7 +154,7 @@ function format_response_nodes_ways($response, $distance, $idDeb, $idFin)
 	//	Structure to remember which nodes were added -> to add each node only once
 	$alreadyAdded = array();
 
-	foreach ($response as $segment) 
+	foreach ($response as $segment)
 	{
 		if ($segment['idnodea']==$idDeb)
 		{
@@ -179,7 +179,7 @@ function format_response_nodes_ways($response, $distance, $idDeb, $idFin)
 
 			$resFormated[2]['resultat'][] = array('id' => $segment['id'],
 												  'id_a' => 'deb',
-												  'id_b' => "".$segment['idnodeb']."", 
+												  'id_b' => "".$segment['idnodeb']."",
 												  'distance' => $segment['distance']);
 		}
 		elseif ($segment['idnodeb']==$idDeb)
@@ -203,7 +203,7 @@ function format_response_nodes_ways($response, $distance, $idDeb, $idFin)
 													  'lng' => $segment['lonb']);
 			}
 
-			$resFormated[2]['resultat'][] = array('id' => $segment['id'], 
+			$resFormated[2]['resultat'][] = array('id' => $segment['id'],
 												  'id_a' => "".$segment['idnodea']."",
 												  'id_b' => 'deb',
 												  'distance' => $segment['distance']);
@@ -231,7 +231,7 @@ function format_response_nodes_ways($response, $distance, $idDeb, $idFin)
 
 			$resFormated[2]['resultat'][] = array('id' => $segment['id'],
 												  'id_a' => 'fin',
-												  'id_b' => "".$segment['idnodeb']."", 
+												  'id_b' => "".$segment['idnodeb']."",
 												  'distance' => $segment['distance']);
 		}
 		elseif ($segment['idnodeb']==$idFin)
@@ -255,9 +255,9 @@ function format_response_nodes_ways($response, $distance, $idDeb, $idFin)
 													  'lng' => $segment['lonb']);
 			}
 
-			$resFormated[2]['resultat'][] = array('id' => $segment['id'], 
+			$resFormated[2]['resultat'][] = array('id' => $segment['id'],
 												  'id_a' => "".$segment['idnodea']."",
-												  'id_b' => 'fin', 
+												  'id_b' => 'fin',
 												  'distance' => $segment['distance']);
 		}
 		else
@@ -280,9 +280,9 @@ function format_response_nodes_ways($response, $distance, $idDeb, $idFin)
 													  'lng' => $segment['lonb']);
 			}
 
-			$resFormated[2]['resultat'][] = array('id' => $segment['id'], 
+			$resFormated[2]['resultat'][] = array('id' => $segment['id'],
 												  'id_a' => "".$segment['idnodea']."",
-												  'id_b' => "".$segment['idnodeb']."", 
+												  'id_b' => "".$segment['idnodeb']."",
 												  'distance' => $segment['distance']);
 		}
 	}
