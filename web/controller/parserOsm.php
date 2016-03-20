@@ -37,7 +37,7 @@ function start($parser,$element_name,$element_attrs) {
 
         if (count($segments)!=0)
         {
-          // Segment already in database -> don't parse the 
+          // Segment already in database -> don't parse the
           // following NDs
           $parserOn = false;
           echo "PARSER OFF !!<br/>";
@@ -54,7 +54,7 @@ function start($parser,$element_name,$element_attrs) {
           $aNote=0;
         }
       }
-       
+
       break;
     case "ND":
       if ($parserOn)
@@ -77,7 +77,7 @@ function start($parser,$element_name,$element_attrs) {
           if (count($points)!=0)
           {
             // Already part of a segment
-            
+
             // We found node B for the current segment !!
             $tmpSegPoints[$nbPoint] = $element_attrs['REF'];
             $nbPoint = $nbPoint+1;
@@ -87,11 +87,11 @@ function start($parser,$element_name,$element_attrs) {
             global $aNote;
 
             //  INSERT NEW SEGMENT TO DB
-            try 
+            try
             {
               echo "INSERT new segment ! <br/>";
-              $idSeg = insert_segment_into_segments($anIdsegosm, $aDistance, 
-                                                    $aNote, $tmpSegPoints[0], 
+              $idSeg = insert_segment_into_segments($anIdsegosm, $aDistance,
+                                                    $aNote, $tmpSegPoints[0],
                                                     $tmpSegPoints[$nbPoint-1]);
 
               insert_segment_into_s2p($idSeg[0]['id'], $tmpSegPoints);
@@ -101,7 +101,7 @@ function start($parser,$element_name,$element_attrs) {
               echo "FAIL: INSERT SEGMENT INTO DB !<br/>";
               die('Erreur : '.$e->getMessage());
             }
-            
+
 
             //  RESET LIST STRUCTURE
             $tmpSegPoints[0] = null;
@@ -128,7 +128,7 @@ function start($parser,$element_name,$element_attrs) {
               //        Need to create the 2 segments
               /***********************************************/
               /***** FIRST SEGMENT ******/
-              foreach ($olds2p as $point) 
+              foreach ($olds2p as $point)
               {
                 if($point['idpointgps']==$points[0]['idpointgps'])
                 {
@@ -152,31 +152,31 @@ function start($parser,$element_name,$element_attrs) {
 
               /***** SECOND SEGMENT ******/
               $olds2pLength = count($olds2p);
-              for ($i=$nbPoint1; $i < $olds2pLength ; $i++) 
-              { 
+              for ($i=$nbPoint1; $i < $olds2pLength ; $i++)
+              {
                 $newSegment2[$nbPoint2] = $olds2p[$i]['idpointgps'];
-                $nbPoint2 = $nbPoint2 + 1;  
+                $nbPoint2 = $nbPoint2 + 1;
               }
 
               /*****************************************************/
               //            INSERT TWO NEW SEGMENT TO DB
               /*****************************************************/
-              try 
+              try
               {
                 // segment1
-                $idSeg1 = insert_segment_into_segments($oldSegment[0]['idsegosm'], 
-                                                      $oldSegment[0]['distance'], 
-                                                      $oldSegment[0]['note'], 
-                                                      $newSegment1[0], 
+                $idSeg1 = insert_segment_into_segments($oldSegment[0]['idsegosm'],
+                                                      $oldSegment[0]['distance'],
+                                                      $oldSegment[0]['note'],
+                                                      $newSegment1[0],
                                                       $newSegment1[$nbPoint1-1]);
 
                 insert_segment_into_s2p($idSeg1[0]['id'], $newSegment1);
 
                 // segment2
-                $idSeg2 = insert_segment_into_segments($oldSegment[0]['idsegosm'], 
-                                                      $oldSegment[0]['distance'], 
-                                                      $oldSegment[0]['note'], 
-                                                      $newSegment2[0], 
+                $idSeg2 = insert_segment_into_segments($oldSegment[0]['idsegosm'],
+                                                      $oldSegment[0]['distance'],
+                                                      $oldSegment[0]['note'],
+                                                      $newSegment2[0],
                                                       $newSegment2[$nbPoint2-1]);
 
                 insert_segment_into_s2p($idSeg2[0]['id'], $newSegment2);
@@ -218,10 +218,10 @@ function stop($parser,$element_name) {
         global $aNote;
 
         //  INSERT NEW SEGMENT TO DB
-        try 
+        try
         {
-          $idSeg = insert_segment_into_segments($anIdsegosm, $aDistance, 
-                                                $aNote, $tmpSegPoints[0], 
+          $idSeg = insert_segment_into_segments($anIdsegosm, $aDistance,
+                                                $aNote, $tmpSegPoints[0],
                                                 $tmpSegPoints[$nbPoint-1]);
           insert_segment_into_s2p($idSeg[0]['id'], $tmpSegPoints);
         }
@@ -261,7 +261,7 @@ $fp=fopen("dirname(__DIR__).'/../../files/osm/villeurbanneTout.osm","r");
 
 // Read data
 
-while ($data=fread($fp,4096) AND $countWay<2500) {
+while ($data=fread($fp,4096)) {
   $countWay = $countWay + 1;
   xml_parse($parser,$data,feof($fp)) or
   die (sprintf("XML Error: %s at line %d",
