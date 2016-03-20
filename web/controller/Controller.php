@@ -72,6 +72,10 @@ function analyzeRequest($request, $params)
 			buildSolutionsFromSegments(1678246930);
 		break;
 
+		case "test":
+			test();
+		break;
+
 		default:
 			print "Action not found";
 			break;
@@ -314,5 +318,15 @@ function buildSolutionsFromSegments($idDeb)
 		$tab["Solution".++$i] = $solution;
 	}
 	header('Content-Type: application/json', JSON_PRETTY_PRINT);
+	print json_encode($tab);
+}
+
+/**
+*	Test API
+*/
+function test()
+{
+	header('Content-Type: application/json', JSON_PRETTY_PRINT);
+	$tab = array("nom"=>"Peter", "nom"=>"James", "nom"=>"Joe");
 	print json_encode($tab);
 }
