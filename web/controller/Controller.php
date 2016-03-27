@@ -69,7 +69,7 @@ function analyzeRequest($request, $params)
 		break;
 
 		case "returnResult":
-			buildSolutionsFromSegments(1678246930);
+			buildSolutionsFromSegments(54803119);
 		break;
 
 		case "test":
