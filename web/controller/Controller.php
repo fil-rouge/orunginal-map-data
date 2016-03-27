@@ -125,16 +125,13 @@ function getRoutes($params)
 	$selectedSegments = get_segments_in_rectangle($latMin, $lonMin, $latMax, $lonMax);
 
 	//	3. Print the located segments to param.json file
-	echo "Try printing to param.json<br>";
 	format_response_nodes_ways($selectedSegments, $distance, $closestDeb[0]['idosm'], $closestFin[0]['idosm']);
-	echo "Success printing to param.json<br>";
 
 
 	//	4. Call algorithm to find solutions
 	try
 	{
 		call_algo();
-		echo "Success calling algo<br>";
 	}
 	catch(Exception $e)
 	{
