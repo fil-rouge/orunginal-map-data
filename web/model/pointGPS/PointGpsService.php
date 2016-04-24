@@ -17,7 +17,7 @@ function get_pointGPS($limit)
 	$qry->setFetchMode(PDO::FETCH_ASSOC);
 	$qry->execute();
 	$pointGPS = $qry->fetchAll();
-	
+
 	return $pointGPS;
 }
 
@@ -36,7 +36,7 @@ function count_points()
 	$qry->setFetchMode(PDO::FETCH_ASSOC);
 	$qry->execute();
 	$pointGPS = $qry->fetchAll();
-	
+
 	return $pointGPS;
 }
 
@@ -51,13 +51,13 @@ function get_pointGPS_by_id($id)
 	global $bdd;
 
 	//query to get ALL GPS points from database
-	$qry = $bdd->prepare('SELECT idosm, lat, lon FROM pointGPS 
+	$qry = $bdd->prepare('SELECT idosm, lat, lon FROM pointGPS
 						  WHERE pointGPS.idosm='.$id);
 
 	$qry->setFetchMode(PDO::FETCH_ASSOC);
 	$qry->execute();
 	$pointGPS = $qry->fetchAll();
-	
+
 	return $pointGPS;
 }
 
@@ -78,7 +78,7 @@ function get_by_coord($aLat, $aLon)
 	$qry->setFetchMode(PDO::FETCH_ASSOC);
 	$qry->execute();
 	$pointGPS = $qry->fetchAll();
-	
+
 	return $pointGPS;
 }
 
@@ -93,7 +93,7 @@ function insert_pointgps($anIdosm, $aLat, $aLon)
 	//query to get ALL GPS points from database
 	$line='INSERT INTO pointGPS values ('.$anIdosm.','.$aLat.','.$aLon.');';
 	append_to_file($webDir.'/../scripts/insertPoints.sql', $line);
-	
+
 }
 
 
@@ -107,13 +107,13 @@ function get_point_by_id_from_s2p($id)
 	global $bdd;
 
 	//query to get ALL GPS points from database
-	$qry = $bdd->prepare('SELECT * FROM segments2pointgps 
+	$qry = $bdd->prepare('SELECT * FROM segments2pointgps
 						  WHERE idpointgps='.$id);
 
 	$qry->setFetchMode(PDO::FETCH_ASSOC);
 	$qry->execute();
 	$pointGPS = $qry->fetchAll();
-	
+
 	return $pointGPS;
 }
 
@@ -130,7 +130,7 @@ function get_intersections($limit)
 	global $bdd;
 
 	//query to get ALL GPS points from database
-	$qry = $bdd->prepare('SELECT DISTINCT idosm, lat, lon 
+	$qry = $bdd->prepare('SELECT DISTINCT idosm, lat, lon
 						  FROM pointGPS p, segments2pointgps s2p
 						  WHERE isnode=true AND s2p.idpointgps=p.idosm
 						  LIMIT '.$limit);
@@ -138,7 +138,7 @@ function get_intersections($limit)
 	$qry->setFetchMode(PDO::FETCH_ASSOC);
 	$qry->execute();
 	$pointGPS = $qry->fetchAll();
-	
+
 	return $pointGPS;
 }
 
@@ -147,30 +147,26 @@ function get_intersections($limit)
 /**********************************************************************************/
 
 /**
-*	Returns the closest gps points to 
-*	$targetLat & $targetLon 
+*	Returns the closest gps points to
+*	$targetLat & $targetLon
 */
-function get_closer_point($targetLat, $targetLon)
+function get_closest_point($targetLat, $targetLon)
 {
 	//link to the global database connexion
 	global $bdd;
 
 	//query to get ALL GPS points from database
-	$qry = $bdd->prepare('SELECT idosm, lat, lon
-						  FROM pointgps p, segments2pointgps s2p
-						  WHERE (ABS(lat-'.$targetLat.')+
-								 ABS(lon-'.$targetLon.'))=
-
-						  	(SELECT MIN(ABS(lat-'.$targetLat.')+
-								 ABS(lon-'.$targetLon.'))
-							FROM pointgps)
-
-								AND s2p.isnode = true 
-								AND s2p.idpointgps=p.idosm');
+	$qry = $bdd->prepare('SELECT p.idosm, ( (lat-'.$targetLat.')^2.0 + ((lon-'.$targetLon.')*cos(pi()*'.$targetLat.'/360))^2.0 ) AS dist
+												FROM pointgps p, segments2pointgps s2p
+												WHERE s2p.isnode = true
+												AND s2p.idpointgps = p.idosm
+												GROUP BY p.idosm, p.lat, p.lon
+												ORDER BY dist ASC
+												LIMIT 1');
 
 	$qry->setFetchMode(PDO::FETCH_ASSOC);
 	$qry->execute();
 	$pointGPS = $qry->fetchAll();
-	
+
 	return $pointGPS;
 }

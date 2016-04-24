@@ -103,7 +103,7 @@ function update_distances($limit)
 * 	Returns the distance between two gps points
 *
 */
-function get_distance($lat1, $lon1, $lat2, $lon2)
+/*function get_distance($lat1, $lon1, $lat2, $lon2)
 {
   $theta = $lon1 - $lon2;
   $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +
@@ -113,6 +113,21 @@ function get_distance($lat1, $lon1, $lat2, $lon2)
   $miles = $dist * 60 * 1.1515;
 
   return ($miles * 1.609344);
+}*/
+function get_distance($latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo, $earthRadius = 6371)
+{
+  // convert from degrees to radians
+  $latFrom = deg2rad($latitudeFrom);
+  $lonFrom = deg2rad($longitudeFrom);
+  $latTo = deg2rad($latitudeTo);
+  $lonTo = deg2rad($longitudeTo);
+
+  $latDelta = $latTo - $latFrom;
+  $lonDelta = $lonTo - $lonFrom;
+
+  $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) +
+    cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
+  return $angle * $earthRadius;
 }
 
 /**********************************************************************************/

@@ -1,147 +1,135 @@
 {
     "solutions": [
         {
-            "distanceTotale": 0.8056643009185791,
+            "distanceTotale": 0.9996438026428223,
             "categorie": 1,
-            "noteTotale": 2.9787561893463136,
+            "noteTotale": 2.9989333152770998,
             "arcs": [
                 {
-                    "idArc": 48530,
+                    "idArc": 75887,
                     "noeudDeb": "deb",
-                    "noeudFin": "208785809"
+                    "noeudFin": "54704577"
                 },
                 {
-                    "idArc": 48855,
-                    "noeudDeb": "208785809",
-                    "noeudFin": "54803122"
+                    "idArc": 76549,
+                    "noeudDeb": "54704577",
+                    "noeudFin": "54704569"
                 },
                 {
-                    "idArc": 48856,
-                    "noeudDeb": "54803122",
-                    "noeudFin": "208769279"
+                    "idArc": 75745,
+                    "noeudDeb": "54704569",
+                    "noeudFin": "25468033"
                 },
                 {
-                    "idArc": 48219,
-                    "noeudDeb": "208769279",
-                    "noeudFin": "26086117"
+                    "idArc": 75748,
+                    "noeudDeb": "25468033",
+                    "noeudFin": "25468032"
                 },
                 {
-                    "idArc": 51147,
-                    "noeudDeb": "26086117",
-                    "noeudFin": "26086123"
+                    "idArc": 75747,
+                    "noeudDeb": "25468032",
+                    "noeudFin": "25468030"
                 },
                 {
-                    "idArc": 51148,
-                    "noeudDeb": "26086123",
-                    "noeudFin": "26086116"
+                    "idArc": 75728,
+                    "noeudDeb": "25468030",
+                    "noeudFin": "25468005"
                 },
                 {
-                    "idArc": 48537,
-                    "noeudDeb": "26086116",
-                    "noeudFin": "54803872"
+                    "idArc": 75902,
+                    "noeudDeb": "25468005",
+                    "noeudFin": "25468014"
                 },
                 {
-                    "idArc": 48539,
-                    "noeudDeb": "54803872",
-                    "noeudFin": "208822503"
+                    "idArc": 75901,
+                    "noeudDeb": "25468014",
+                    "noeudFin": "25468013"
                 },
                 {
-                    "idArc": 48810,
-                    "noeudDeb": "208822503",
+                    "idArc": 76540,
+                    "noeudDeb": "25468013",
+                    "noeudFin": "25468018"
+                },
+                {
+                    "idArc": 76541,
+                    "noeudDeb": "25468018",
+                    "noeudFin": "25468017"
+                },
+                {
+                    "idArc": 76538,
+                    "noeudDeb": "25468017",
+                    "noeudFin": "25468019"
+                },
+                {
+                    "idArc": 76535,
+                    "noeudDeb": "25468019",
                     "noeudFin": "fin"
                 }
             ]
         },
         {
-            "distanceTotale": 0.8058046102523804,
+            "distanceTotale": 1.0009111166000367,
             "categorie": 1,
-            "noteTotale": 2.9782326221466066,
+            "noteTotale": 2.997267723083496,
             "arcs": [
                 {
-                    "idArc": 48530,
+                    "idArc": 75887,
                     "noeudDeb": "deb",
-                    "noeudFin": "208785809"
+                    "noeudFin": "54704577"
                 },
                 {
-                    "idArc": 48855,
-                    "noeudDeb": "208785809",
-                    "noeudFin": "54803122"
+                    "idArc": 76549,
+                    "noeudDeb": "54704577",
+                    "noeudFin": "54704569"
                 },
                 {
-                    "idArc": 48853,
-                    "noeudDeb": "54803122",
-                    "noeudFin": "208769091"
+                    "idArc": 75745,
+                    "noeudDeb": "54704569",
+                    "noeudFin": "25468033"
                 },
                 {
-                    "idArc": 52345,
-                    "noeudDeb": "208769091",
-                    "noeudFin": "2552641232"
+                    "idArc": 75743,
+                    "noeudDeb": "25468033",
+                    "noeudFin": "3875764382"
                 },
                 {
-                    "idArc": 52346,
-                    "noeudDeb": "2552641232",
-                    "noeudFin": "208769219"
+                    "idArc": 75896,
+                    "noeudDeb": "3875764382",
+                    "noeudFin": "25468029"
                 },
                 {
-                    "idArc": 48511,
-                    "noeudDeb": "208769219",
-                    "noeudFin": "208769279"
+                    "idArc": 75900,
+                    "noeudDeb": "25468029",
+                    "noeudFin": "25468028"
                 },
                 {
-                    "idArc": 48856,
-                    "noeudDeb": "208769279",
-                    "noeudFin": "54803122"
+                    "idArc": 75903,
+                    "noeudDeb": "25468028",
+                    "noeudFin": "25468014"
                 },
                 {
-                    "idArc": 48854,
-                    "noeudDeb": "54803122",
-                    "noeudFin": "fin"
-                }
-            ]
-        },
-        {
-            "distanceTotale": 0.8058047294616699,
-            "categorie": 1,
-            "noteTotale": 2.978229522705078,
-            "arcs": [
-                {
-                    "idArc": 48530,
-                    "noeudDeb": "deb",
-                    "noeudFin": "208785809"
+                    "idArc": 75901,
+                    "noeudDeb": "25468014",
+                    "noeudFin": "25468013"
                 },
                 {
-                    "idArc": 48855,
-                    "noeudDeb": "208785809",
-                    "noeudFin": "54803122"
+                    "idArc": 76540,
+                    "noeudDeb": "25468013",
+                    "noeudFin": "25468018"
                 },
                 {
-                    "idArc": 48856,
-                    "noeudDeb": "54803122",
-                    "noeudFin": "208769279"
+                    "idArc": 76541,
+                    "noeudDeb": "25468018",
+                    "noeudFin": "25468017"
                 },
                 {
-                    "idArc": 48511,
-                    "noeudDeb": "208769279",
-                    "noeudFin": "208769219"
+                    "idArc": 76538,
+                    "noeudDeb": "25468017",
+                    "noeudFin": "25468019"
                 },
                 {
-                    "idArc": 52346,
-                    "noeudDeb": "208769219",
-                    "noeudFin": "2552641232"
-                },
-                {
-                    "idArc": 52345,
-                    "noeudDeb": "2552641232",
-                    "noeudFin": "208769091"
-                },
-                {
-                    "idArc": 48853,
-                    "noeudDeb": "208769091",
-                    "noeudFin": "54803122"
-                },
-                {
-                    "idArc": 48854,
-                    "noeudDeb": "54803122",
+                    "idArc": 76535,
+                    "noeudDeb": "25468019",
                     "noeudFin": "fin"
                 }
             ]

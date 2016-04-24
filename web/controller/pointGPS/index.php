@@ -15,7 +15,7 @@ function display_points($limit)
 
 	// Data processing
 	$points = array();
-	foreach($pointsGPS as $point) 
+	foreach($pointsGPS as $point)
 	{
 		$points[] = new PointGPS($point['idosm'],$point['lat'],$point['lon']);
 	}
@@ -31,12 +31,8 @@ function display_points($limit)
 *	Returns the lat, lon of the closest point to $aLat, $aLon
 *
 */
-function process_closer_point($aLat, $aLon)
+function process_closest_point($aLat, $aLon)
 {
-	$closestPoint = get_closer_point($aLat, $aLon);
+	$closestPoint = get_closest_point($aLat, $aLon);
 	return $closestPoint;
 }
-
-//process_closer_point(45.7405571, 4.8638673);
-
-

@@ -47,7 +47,7 @@ function analyzeRequest($request, $params)
 
 		case "getDistances":
 			//	Write distances to script scripts/setDistances.sql
-			update_distances(10000);
+			update_distances(100000);
 			echo "DONE : Check file scripts/setDistance.sql !<br/>";
 			break;
 
@@ -113,9 +113,9 @@ function getRoutes($params)
 	$distance = $paramsFormatted[8];
 
 	//	1. Get closer points to $deb & closer point to $fin
-	$closestDeb = process_closer_point($latDeb, $lonDeb);
+	$closestDeb = process_closest_point($latDeb, $lonDeb);
 
-	$closestFin = process_closer_point($latFin, $lonFin);
+	$closestFin = process_closest_point($latFin, $lonFin);
 
 	//	2. Get segments contained in the rectangle area
 	$selectedSegments = get_segments_in_rectangle($latMin, $lonMin, $latMax, $lonMax);
