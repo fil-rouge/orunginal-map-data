@@ -5,7 +5,12 @@
 	// Connexion à la base de données
 	try
 	{
-	    $bdd = new PDO('pgsql:host=' . $host . ';port=5432;dbname=' . $db . ';user=' . $username . ';password=' . $password );
+		$dbopts = parse_url(getenv('DATABASE_URL'));
+
+        $bdd = new PDO('pgsql:host=' . $dbopts["host"] . ';port='. $dbopts["port"] .';dbname=' . ltrim($dbopts["path"],'/') . 
+        			   ';user=' . $dbopts["user"] . ';password=' . $dbopts["pass"] );
+
+	    //$bdd = new PDO('pgsql:host=' . $host . ';port=5432;dbname=' . $db . ';user=' . $username . ';password=' . $password );
 	}
 	catch(Exception $e)
 	{

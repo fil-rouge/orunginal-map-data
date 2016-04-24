@@ -72,6 +72,10 @@ function analyzeRequest($request, $params)
 			buildSolutionsFromSegments(54803119);
 		break;
 
+		case "test":
+			test();
+		break;
+
 		default:
 			print "Action not found";
 			break;
@@ -123,8 +127,16 @@ function getRoutes($params)
 	//	3. Print the located segments to param.json file
 	format_response_nodes_ways($selectedSegments, $distance, $closestDeb[0]['idosm'], $closestFin[0]['idosm']);
 
+
 	//	4. Call algorithm to find solutions
-	call_algo();
+	try
+	{
+		call_algo();
+	}
+	catch(Exception $e)
+	{
+	    die('Erreur : '.$e->getMessage());
+	}
 
 	// 	5. Fill the solutions with the GPS points for the app to display the solutions
 	// 	6. Return the solutions to the app
@@ -314,5 +326,15 @@ function buildSolutionsFromSegments($idDeb)
 		$tab["Solution".++$i] = $solution;
 	}
 	header('Content-Type: application/json', JSON_PRETTY_PRINT);
+	print json_encode($tab);
+}
+
+/**
+*	Test API
+*/
+function test()
+{
+	header('Content-Type: application/json', JSON_PRETTY_PRINT);
+	$tab = array("nom"=>"Peter", "nom"=>"James", "nom"=>"Joe");
 	print json_encode($tab);
 }
