@@ -323,9 +323,10 @@ function buildSolutionsFromSegments($idDeb)
 			$points = get_segment_points_ordered($arc->idArc, $arc->noeudDeb == "deb" ? $idDeb : $arc->noeudDeb);
 			$solution = array_merge($solution, $points);
 		}
+
+		$solution->distance = $sol->distanceTotale;
+		$solution->note = $sol->noteTotale;
 		$tab["Solution".++$i] = $solution;
-		$tab["Solution".++$i]->distance = $sol->distanceTotale;
-		$tab["Solution".++$i]->note = $sol->noteTotale;
 	}
 	header('Content-Type: application/json', JSON_PRETTY_PRINT);
 	print json_encode($tab);
