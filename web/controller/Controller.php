@@ -324,8 +324,8 @@ function buildSolutionsFromSegments($idDeb)
 			$solution = array_merge($solution, $points);
 		}
 		$tab["Solution".++$i] = $solution;
-		$tab['distance'] = $contents->distanceTotale;
-		$tab['note'] = $contents->noteTotale;
+		$tab['params'] = array('distance' => $contents->distanceTotale,
+								'note' => $contents->noteTotale);
 	}
 	header('Content-Type: application/json', JSON_PRETTY_PRINT);
 	print json_encode($tab);
